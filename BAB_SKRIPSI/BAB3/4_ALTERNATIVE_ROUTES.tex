@@ -1,0 +1,208 @@
+Untuk mencari rute alternatif, penulis menggunakan metode heuristik \textit{admissible paths} yang diperkenalkan pada penelitian oleh \cite{Abraham2010}. Secara intuitif, rute alternatif berbeda secara signifikan dari rute tercepat $Opt$, tetapi rute tersebut masuk akal dan tidak lebih jauh daripada rute $Opt$. Diberikan semua kemungkinan rute $P$ dari simpul $s$ ke simpul $t$, rute $P$ disebut sebagai \textit{admissible alternative} jika memenuhi sifat-sifat berikut:
+\begin{enumerate}
+    \item \textit{Limited sharing}. Penjumlahan \textit{travel time} dari sisi-sisi yang muncul pada kedua rute \textit{Opt} dan rute \textit{P} ($\sigma(v)$) kurang dari $\gamma \cdot dist(s,t)$ 
+    \item \textit{Local optimality}. Setiap subrute (rute prefiks atau suffiks) dari $P$ memiliki \textit{travel time} yang lebih kecil dari $\alpha \cdot dist(s,t)$.
+    \item \textit{Bounded stretch}. Setiap pasang simpul $u,v\in P$, berlaku $l(P_{uv})< (1+\epsilon)\cdot dist(u,v)$. 
+\end{enumerate}
+
+Agar metode \textit{admissible paths} bisa diintegrasikan dengan Time-Dependent Customizable Route Planning (TD-CRP), diperlukan sedikit modifikasi pada algoritma kueri. Karena metode \textit{admissible paths} menentukan kandidat rute-rute alternatif dari himpunan rute $s-v-t$, kueri TD-CRP perlu dibuat \textit{bidirectional}. \textit{Upper} dan \textit{lower bound} dari \textit{minimum travel time } dari simpul $s$ ke $t$ didefinisikan dengan:
+\begin{align}
+    Max_{G}(s,t)=\min \{ \sum_{i=1}^{k-1} \max f_i \mid (v_1 \rightarrow_{f_1} \ldots \rightarrow_{f_{k-1}} v_k ) \text{ adalah rute dari simpul } s \text{ ke simpul } t \} \\ 
+    Min_{G}(s,t)=\min \{ \sum_{i=1}^{k-1} \min f_i \mid (v_1 \rightarrow_{f_1} \ldots \rightarrow_{f_{k-1}} v_k ) \text{ adalah rute dari simpul } s \text{ ke simpul } t \} \\
+    Min_{G}(s,t)\leq TTP_G(s,t)(\tau)\leq Max_G(s,t) \text{ untuk semua } \tau\in \mathbb{R}
+\end{align}
+
+
+
+\begin{algorithm}
+\caption{BDTDDijkstra menghitung kandidat \textit{via nodes} $X\subseteq V$} 
+\label{alg:bidirectional-td-dijkstra-crp}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{\textwidth}
+\scriptsize
+\begin{algorithmic}[1]
+\setstretch{0.9}
+    \Procedure{BDTDDijkstra}{$s,t:V, \tau_0: \mathbb{R}$}: $(Set, \mathbb{R}, Set, Set, Set, Set)$
+    \State $\tau[u]=\infty, \ u\in v, \ \tau[s]=\tau_0$ \Comment{\textit{node time travel label}}
+    \State $[q[u],r[u]]=[\infty, \infty], \ u\in V, \ [q[t], t[t]]=[0,0]$ \Comment{\textit{Lower bound } dan \textit{upper Bound minimum travel time label}}
+    \State $p_s[u]=\perp, p_t[u]=\emptyset, \ u\in V $
+    \State $B=\infty, \ d=t$ \Comment{arah pencarian (\textit{forwardSearch} atau \textit{backwardSearch})}
+    \State $X=\emptyset$
+    \State $Q_s=\{(s_, sEntryPos, \tau_0)\}, \ Q_t=\{(t, tEntryPos,0)\}$
+    \State $overlayQ_s=\emptyset, \ overlayQ_t=\emptyset $
+    \While{$(Q_S \neq \emptyset \textbf{ or } Q_t\neq \emptyset \textbf{ and } \min \{Q_s.min(), Q_t.min()\})\leq (1+\epsilon) B$}
+        \State $minG = \min \{ Q_s, Q_t \}$
+        \State $minOverlayG = \min \{ overlayQ_s, overlayQ_t \}$
+        \If{$ minG < minOverlayG$}
+            \If {$Q_{\neg d}\neq \emptyset $}
+                \State $d=\neg d$
+            \EndIf 
+            \State $(u, uEntryPos)=Q_d.deleteMin()$
+            \If{$B<\infty \textbf{ and } \tau[u] + q[u] \leq B $}
+                \State $X= X \cup \{(u, \tau[u]+r[u])\}$
+            \EndIf 
+    
+            
+            \State $B= \min \{B, \ \tau[u]+r[u]\}$
+            \For {$(u \rightarrow_f v, turnCost_{uv}) \in E_d $}
+                \If{$d=s$}
+                    \State \Call{tdRelaxCRP}{$u\rightarrow_f,v,v,u,uEntryPos,\tau,p_s,Q_s,overlayQ_s,turnCost_{uv}$}
+                \Else 
+                    \State \Call{intervalRelaxCRP}{$u,v,[q[u]+min f, \ r[u]+max f], q,r,p_t, Q_t,overlayQ_t$}
+                \EndIf 
+            \EndFor 
+        \Else 
+            \If {$overlayQ_{\neg d}\neq \emptyset $}
+                \State $d=\neg d$
+            \EndIf 
+            \State $u=overlayQ_d.deleteMin()$
+            \If{$B<\infty \textbf{ and } \tau[u] + q[u] \leq B $}
+                \State $X= X \cup \{(u,\tau[u]+r[u])\}$
+            \EndIf 
+    
+            
+            \State $B= \min \{B, \ \tau[u]+r[u]\}$
+            \State $l_{st}(u)=\min\{MSD(PV(s), PV(u)), MSD(PV(t), PV(u))\}$
+            \For {$u \rightarrow_{f_{shortcut\_uv}} v \in E_{d,C^{l_{st}(u)}} $}
+                \If{$d=s$}
+                    \State \Call{tdRelaxOverlayCRP}{$u\rightarrow_{f_{shortcut\_uv}}v,v,u, uEntryPoint,\tau,p_s,Q_s,overlayQ_s$}
+                \Else 
+                    \State \Call{intervalRelaxCRP}{$u,v,uEntryPoint,[q[u]+min f_{shortcut\_uv}, \ r[u]+max f_{shortcut\_uv}], q,r,p_t, Q_t,overlayQ_t$}
+                \EndIf 
+            \EndFor 
+        \EndIf 
+        
+        
+    \EndWhile
+    \State \textbf{return} $\mathbf{X}, B, p_s, p_t, \tau, r$
+    \EndProcedure
+\end{algorithmic}
+\end{minipage}%
+}
+\end{algorithm}
+
+
+\begin{algorithm}
+\caption{intervalRelaxCRP} 
+\label{alg:intervalRelaxCRP}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{\textwidth}
+\scriptsize
+\begin{algorithmic}[1]
+\setstretch{0.9}
+    \Procedure{intervalRelaxCRP}{$u,v, uEntryPoint, \ [q_{new}, r_{new}], q,r, p, Q, overlayQ, turnCost_{uv}$}
+    \If{$q_{new}>r[v]$}
+        \State \textbf{return}
+    \EndIf 
+    \If{$r_{new}<q[v]$}
+        \State $p[v]=\emptyset$
+    \EndIf
+    \State $p[v]= u\cup p[v]$
+    \If{$q_{new}\geq q[v] \textbf{ and }r_{new} \geq r[v]$}
+        \State \textbf{return}
+    \EndIf 
+
+    \State $l_{st}(v)=min\{MSD(PV(s), PV(v)), MSD(PV(t), PV(v))\}$
+    \If{$l_{st}(v) =0$ }
+        \State $[q[v], r[v]]=[\min\{q[v], q_{new}+turnCost_{uv}\}, \min \{r[v], r_{new}+turnCost_{uv}\}]$
+        \If{$v\notin Q$}
+            \State $Q.insert(v, q[v])$
+        \Else 
+            \State $Q.decreaseKey(v, q[v])$
+        \EndIf 
+    \Else 
+        \State $vOverlay = GetOverlayVertex(v, uEntryPoint)$
+        \State $[q[vOverlay], r[vOverlay]]=[\min\{q[vOverlay], q_{new}+turnCost_{uv}\}, \min \{r[vOverlay], r_{new}+turnCost_{uv}\}]$
+        \If{$vOverlay\notin overlayQ$}
+            \State $overlayQ.insert(vOverlay, q[vOverlay])$
+        \Else 
+            \State $overlayQ.decreaseKey(vOverlay, q[vOverlay])$
+        \EndIf 
+    \EndIf 
+    \EndProcedure
+
+    
+\end{algorithmic}
+\end{minipage}%
+}
+\end{algorithm}
+
+Algoritma pencarian rute alternatif dimulai dari menjalankan $BDTDDijkstra$ untuk mendapatkan kandidat \textit{via nodes} $v\in V$. Kueri Bidirectional Time-Dependent Dijkstra untuk Customizable Route Plannning ditunjukkkan pada Algoritma~\ref{alg:bidirectional-td-dijkstra-crp}. Untuk setiap \textit{via node} $v$, cari rute tercepat $s-v$ dan $v-t$ dengan menggunakan $TDDijkstraCRP$ yang jika digabung akan menghasilkan rute $P_v$ dengan \textit{time travel} $l(v)$. Hitung skor $f(v)=2l(v)+\sigma(v)-pl(v)$. Dimana $l(v)$ adalah \textit{travel time } tentatif optimal dari $v$  ($\tau[u]+r[u]$) saat menjalankan $BDTDDijkstra$. $\sigma(v)$ adalah penjumlahan \textit{travel time} dari sisi-sisi yang muncul pada kedua rute \textit{Opt} dan rute $P_v$. $pl(v)$ adalah plateau dari simpul $v$. Plateau $pl(v)$ dapat dicari dengan membuat subrute $P_{plateau\_v}\subseteq Opt$ yang berisi simpul-simpul $u\in P_{plateau\_v}$ dengan $dist(s,u)+dist(u,t)=l(v)$, $pl(v)$ dihitung dengan menjumlahkan bobot \textit{time travel} dari sisi-sisi $P_{plateau\_v}$. Untuk memastikan kandidat rute alternatif memenuhi kriteria \textit{admissible paths}, penulis membuang kandidat yang memiliki: $l(v)\geq (1+\epsilon)\cdot l(Opt), \sigma(v)\geq\gamma \cdot l(Opt), \text{ atau } pl(v)\leq \alpha \cdot l(Opt)$. Rute-rute alternatif yang dikembalikan adalah kandidat-kandidat yang memiliki $f(v)$ terkecil. Algortima pencarian rute alternatif \textit{admissible paths} ditunjukkan pada Algoritma~\ref{alg:alternative-routes}. Algoritma ini memiliki kompleksitas waktu $O(C_v\cdot (E_1+U_1\log U_1+B^{2}+B \log B))$, dimana $C_v$ adalah jumlah \textit{via node} $v$ yang ditemukan oleh algoritma $BDTDDijkstra$.
+
+
+\begin{algorithm}
+\caption{findAlternativeRoutes mengembalikan sejumlah $k$ rute alternatif terbaik} 
+\label{alg:alternative-routes}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{\textwidth}
+\scriptsize
+\begin{algorithmic}[1]
+\setstretch{0.9}
+    \Procedure{findAlternativeRoutes}{$s,t: V, \tau_0: \mathbb{R}, k: \mathbb{Z}^+$}: $Set$
+        \State $(l_{Opt}, shortestPath, \cdot, \cdot) =$\Call{tdDijkstraCRP}{$s,t, \tau_0$} 
+        \State $(\mathbf{X}, \cdot, p_{sbd}, p_{tbd}, \tau_{bd}, r)=$\Call{BDTDDijkstra}{$s,t, \tau_0$}
+        \State $potentialCandidates = \emptyset$
+        \Procedure{calculatePlateau}{$\tau_{sbd},\tau_{tbd},v, l_v, p_{s}, p_t, \tau_0$}: $\mathbb{R}$
+             \State $plateau = 0$
+             \State $u = v$
+             \While{$u \neq \perp$} \Comment{backtrack}
+                    \If{$u\in p_t \textbf{ and } (\tau_{sbd}[u]-\tau_0)+ \tau_{tbd}[u] = l_v $} \Comment{$dist(s,u)+dist(u,t)=l(v)$}
+                        \State $cost_{uf}= (\tau_{sbd}[u]-\tau_0)-(\tau_{sbd}[p_{s}[u]]-\tau_0)$
+                        \State $ plateau = plateau + cost_{uf} $
+                        \State $u = p_{s}[u]$
+                    \EndIf
+             \EndWhile
+             \State $u = v$
+             \While{$u \neq \perp$} \Comment{backtrack}
+                    \If{$u\in p_s \textbf{ and } (\tau_{sbd}[u]-\tau_0)+ \tau_{tbd}[u] = l_v $} \Comment{$dist(s,u)+dist(u,t)=l(v)$}
+                        \State $cost_{ub}= \tau_{tbd}[u]-\tau_{tbd}[p_{t}[u]]$
+                        \State $ plateau = plateau +  cost_{ub} $
+                        \State $u = p_{t}[u]$
+                    \EndIf
+             \EndWhile
+             \State \textbf{return} $plateau$
+        \EndProcedure
+    
+        \Procedure{calculatedistanceShare}{$Opt, P$}: $\mathbb{R}$
+            \State $distanceShare= 0$
+            \For{$p\in P$}
+                \If {$p \in Opt$}
+                    \State $distanceShare = distanceShare + p.weight$ 
+                \EndIf 
+            \EndFor
+            \State \textbf{return} $distanceShare$
+        \EndProcedure
+        \For {$candidate \in X$}
+            \State $(svTimeTravel, shortestPath, p_s, \tau_{sv}) = $\Call{tdDijkstraCRP}{$s,candidate.node, \tau_0$} 
+            \State $(vtTimeTravel, shortestPath, p_t, \tau_{vt}) = $\Call{tdDijkstraCRP}{$candidate.node, t, \tau_0$} 
+            \State $l_v=svTimeTravel+vtTimeTravel$
+            \If{$l_v \geq (1+\epsilon)\cdot l_{Opt} $}
+                \State $\textbf{continue}$
+            \EndIf
+
+            
+            \State $edgesSV=$\Call{backtrack}{$p_s, candiate.node$}
+            \State $edgesVT=$\Call{backtrack}{$p_t, candiate.node$}
+            \State $\sigma_v=$\Call{calculatedistanceShare}{$shortestPath, edgesSV \cup edgesVT$}
+            \If{$\sigma_v\geq \gamma \cdot l_{Opt}$}
+                \State \textbf{continue} 
+            \EndIf
+            \State $pl_v=$\Call{calculatePlateau}{$\tau_{bd},r,candidate.node,  l_v, p_{sbd}, p_{tbd}, tau_0$}
+            \If{$pl_v \leq \alpha \cdot l_{Opt}$}
+                \State \textbf{continue} 
+            \EndIf
+            \State $f_v=2l_v+\sigma_v-pl_v$
+            \State $potentialCandidates  = potentialCandidates \cup \{candidate.node\}$
+        \EndFor
+        \State $sortedCandidates=$\Call{sort}{$potentialCandidates$}
+        \State \textbf{return} $sortedCandidates[:k]$
+    \EndProcedure
+
+    
+\end{algorithmic}
+\end{minipage}%
+}
+\end{algorithm}
+
+
+

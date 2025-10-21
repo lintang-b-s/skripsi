@@ -1,0 +1,515 @@
+% -----------------------------------------------------------------------
+% Template Skripsi untuk MIPA
+% 
+% @author Yusuf Syaifudin
+% @created 29/02/2016
+% 
+% -----------------------------------------------------------------------
+
+\documentclass[ugmskripsi]{ugmskripsi}
+
+\input{ADDITIONAL_PACKAGES}
+
+% Konfigurasi variable seperti judul dan lain sebagainya
+\input{CONFIG}
+
+
+\begin{document}
+
+%-----------------------------------------------------------------
+% Disini awal masukan untuk muka skripsi
+%-----------------------------------------------------------------
+
+% Cover
+\cover
+
+% Halaman judul
+\titlepageind 
+
+% Halaman Persetujuan
+\approvalpage
+
+% Halaman Pernyataan
+\declarepage
+
+% Halaman Persembahan
+\acknowledment
+\input{BAB_SKRIPSI/BAB0/1_PERSEMBAHAN}
+
+%-----------------------------------------------------------------
+% Disini akhir masukan untuk muka skripsi
+%-----------------------------------------------------------------
+
+% Motto
+\input{BAB_SKRIPSI/BAB0/2_MOTTO}
+
+% Prakata
+\input{BAB_SKRIPSI/BAB0/3_PRAKATA}
+
+%-----------------------------------------------------------------
+% Daftar Isi
+%-----------------------------------------------------------------
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\contentsname}
+\tableofcontents
+%-----------------------------------------------------------------
+% Akhir Daftar Isi
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+% Daftar Tabel
+%-----------------------------------------------------------------
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+%-----------------------------------------------------------------
+% Akhir Daftar Tabel
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+% Daftar Gambar
+%-----------------------------------------------------------------
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+%-----------------------------------------------------------------
+% Akhir Daftar Gambar
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+%Disini awal masukan Intisari
+%-----------------------------------------------------------------
+\begin{abstractind}
+	\input{BAB_SKRIPSI/BAB0/4_ABSTRAK_ID}
+\end{abstractind}
+%-----------------------------------------------------------------
+%Disini akhir masukan Intisari
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+%Disini awal masukan untuk Abstract
+%-----------------------------------------------------------------
+\begin{abstracteng}
+  \input{BAB_SKRIPSI/BAB0/5_ABSTRAK_EN}
+\end{abstracteng}
+%-----------------------------------------------------------------
+%Disini akhir masukan Abstract
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+% Awal BAB 1
+%-----------------------------------------------------------------
+\chapter{PENDAHULUAN}
+\label{PENDAHULUAN}
+
+	\section{Latar Belakang}
+	\label{pendahuluan latar belakang}
+	\input{BAB_SKRIPSI/BAB1/1_LATAR_BELAKANG}
+
+	\section{Rumusan Masalah}
+	\label{pendahuluan rumusan masalah}
+	\input{BAB_SKRIPSI/BAB1/2_RUMUSAN_MASALAH}
+
+	\section{Batasan Masalah}
+	\label{pendahuluan batasan masalah}
+	\input{BAB_SKRIPSI/BAB1/3_BATASAN_MASALAH}
+
+	\section{Tujuan Penelitian}
+	\label{pendahuluan tujuan penelitian}
+	\input{BAB_SKRIPSI/BAB1/4_TUJUAN_PENELITIAN}
+
+	\section{Manfaat Penelitian}
+	\label{pendahuluan manfaat penelitian}
+	\input{BAB_SKRIPSI/BAB1/5_MANFAAT_PENELITIAN}
+
+	\section{Sistematika Penulisan}
+	\label{pendahuluan sistematika penulisan}
+	\input{BAB_SKRIPSI/BAB1/6_SISTEMATIKA_PENULISAN}
+
+%-----------------------------------------------------------------
+% Akhir BAB 1
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+% Awal BAB 2
+%-----------------------------------------------------------------
+\chapter{Penelitian Terkait}
+\label{IDENTIFIIKASI MASALAH DAN IDE INOVATIF}
+
+	\section{Perencanaan Rute dalam Jaringan Transportasi Tidak Bergantung Pada Waktu}
+	\label{identifikasi masalah dan ide inovatif identifikasi masalah}
+	\input{BAB_SKRIPSI/BAB2/1_PERENCANAAN_RUTE_TIME_INDEPENDENT}
+
+        \section{Map Matching dalam Jaringan Transportasi}
+	\label{Map Matching dalam Jaringan Transportasi}
+	\input{BAB_SKRIPSI/BAB2/2_MAP_MATCHING}
+
+    \section{Perencanaan Rute dalam Jaringan Transportasi Bergantung Pada Waktu}
+    \label{Perencanaan Rute dalam Jaringan Transportasi Bergantung Pada Waktu}
+    \input{BAB_SKRIPSI/BAB2/3_TIME_DEPENDENT_ROUTE_PLANNING.tex}
+
+    \section{Prediksi Kecepatan Lalu Lintas}
+    \label{Prediksi Kecepatan Lalu Lintas}
+    \input{BAB_SKRIPSI/BAB2/4_TRAFFIC_SPEED_FORECASTING.tex}
+
+    \section{Perangkat Lunak Route Planning Sumber Terbuka Untuk Openstreetmap}
+    \label{Perangkat Lunak Route Planning Sumber Terbuka}
+    \input{BAB_SKRIPSI/BAB2/5_PERANGKAT_LUNAK_ROUTE_PLANNING_SUMBER_TERBUKA.tex}
+
+
+\begin{table}[h]
+\setlength{\tabcolsep}{6pt}
+\caption{Perbandingan performa berbagai algoritma perutean dalam hal prapemrosesan dan kinerja kueri.}
+\label{tab2:route_planning_algorithm_performance}
+\begin{tabular}{l c c c c c}
+\hline
+ &  & \multicolumn{2}{c}{\textbf{Struktur Data}} & \multicolumn{2}{c}{\textbf{KUERI}} \\
+\cline{3-5}
+\textbf{algoritma} & \textbf{ruang [GiB]} & \textbf{waktu [h:m]} & \textbf{simpul terpindai} & \textbf{waktu [\(\mu\)s]} \\
+\hline
+Dijkstra      & 0.4   & --     & 9\,326\,696 & 2\,195\,080 \\
+CRP           & 0.9   & 1:00   & 2\,766      & 1\,650 \\
+Arc Flags     & 0.6   & 2:46   & 2\,646      & 408 \\
+CH            & 0.4   & 0:05   & 280        & 110 \\
+HPML          & 1.8   & 0:50   & --         & 2.55 \\
+TNR           & 2.5   & 0:22   & --         & 2.09 \\
+HL            & 18.8  & 3:07   & --         & 0.56 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[h]
+\setlength{\tabcolsep}{6pt}
+\caption{Perbandingan performa berbagai algoritma map-matching.}
+\label{tab2:map_matching_performance}
+\begin{tabular}{l l c }
+\hline
+\textbf{algoritma} & \textbf{dataset} & \textbf{akurasi} \\
+\hline
+Offline-HMM  & Seattle & 98\%   \\
+FastViterbi-HMM & Seattle & 98.9\% \\
+OHMM & Singapore & 92.1\% \\
+OLMM & Seattle & 98.57\% \\
+HMM+RCM & Singapore & 91.3\% \\
+IMM & Singapore & 92\% \\
+AMM & Singapore & 98.92\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{longtable}{|p{3.8cm}|p{3.8cm}|l|l|}
+\caption{Perbandingan metode prediksi kecepatan lalu lintas.} \\ 
+\hline
+\textbf{Penulis} & \textbf{Dataset} & \textbf{Metode} & \textbf{Hasil} \\ 
+\hline
+
+
+\multirow{2}{*}{\cite{Wang2016}}
+& \multirow{2}{*}{\shortstack{Beijing GPS \\ \textit{Trajectory}\\(horison 50 menit)}}
+& ARIMA &  MAE: 10.0, RMSE: 12.5 \\
+\cline{3-4} 
+ &  & SVR &  MAE: 10.1, RMSE: 15.1 \\ 
+ \cline{3-4} 
+ &  & SAE &  MAE: 7.6, RMSE: 10.0 \\ 
+ \cline{3-4} 
+ &  & 1D-CNN &  MAE:7.7, RMSE: 10.0 \\
+ \cline{3-4} 
+ &  & CNN &  MAE: 7.0, RMSE: 8.0 \\ 
+ \cline{3-4} 
+ &  & eRCNN &  MAE: 6.9, RMSE: 7.8  \\ 
+\cline{3-4} 
+\hline
+
+\multirow{2}{*}{\cite{Zhongjian2018}}
+& \multirow{2}{*}{\shortstack{Beijing GPS \\ \textit{Trajectory} \\(horison 10 menit)}} 
+& ARIMA &   RMSE: 10.245 \\
+\cline{3-4} 
+ &  & H-ARIMA &  RMSE: 11.867 \\ 
+ \cline{3-4} 
+ &  & SAE & RMSE: 8.471 \\ 
+ \cline{3-4} 
+ &  & LSTM & RMSE: 5.958 \\
+ \cline{3-4} 
+ &  & DCNN & RMSE: 6.085 \\ 
+ \cline{3-4} 
+ &  & GC & RMSE: 5.514 \\ 
+\cline{3-4} 
+ &  & ST-ResNet & RMSE: 5.749 \\ 
+\cline{3-4} 
+ &  & LC-RNN & RMSE: 5.274 \\ 
+\cline{3-4} 
+\hline
+
+\multirow{2}{*}{\cite{Yu2018}}
+& \multirow{2}{*}{\shortstack{PeMSD7(L)\\(horison 45 menit)}}
+& HA & MAE: 4.60, RMSE: 8.05 \\
+\cline{3-4} 
+ &  & LSVR & MAE: 4.79, RMSE: 8.72 \\
+\cline{3-4} 
+ &  & ARIMA &  MAE: 6.30, RMSE: 9.39 \\
+\cline{3-4} 
+ &  & FNN &  MAE: 4.78, RMSE: 8.46 \\ 
+ \cline{3-4} 
+ &  & FC-LSTM & MAE: 4.66, RMSE: 8.20  \\ 
+ \cline{3-4} 
+ &  & GCGRU & MAE: 4.12, RMSE: 7.49 \\
+ \cline{3-4} 
+ &  & STGCN(Cheb) & MAE: 3.97, RMSE: 7.45 \\ 
+ \cline{3-4} 
+ &  & $STGCN(1^{st})$ & MAE: 4.01, RMSE: 7.81 \\ 
+\cline{3-4}
+\hline
+
+\multirow{2}{*}{\cite{Wu2019}}
+& \multirow{2}{*}{\shortstack{PeMS-BAY\\(horison 60 menit)}}
+& ARIMA & MAE: 3.38, RMSE: 6.50 \\
+\cline{3-4} 
+ &  & FC-LSTM & MAE: 2.37, RMSE: 4.96 \\
+\cline{3-4} 
+ &  & WaveNet &  MAE: 2.35, RMSE: 5.43 \\
+\cline{3-4} 
+ &  & DCRNN &  MAE: 2.07, RMSE: 4.74 \\ 
+ \cline{3-4} 
+ &  & STGCN & MAE: 2.49, RMSE: 5.69  \\ 
+ \cline{3-4} 
+ &  & Graph Wavenet & MAE: 1.95, RMSE: 4.52 \\
+ \cline{3-4} 
+\hline
+
+
+\multirow{2}{*}{\cite{Pan2019}}
+& \multirow{2}{*}{\shortstack{METR-LA\\(horison 60 menit)}}
+& HA & MAE: 26.2, RMSE: 56.5 \\
+\cline{3-4} 
+ &  & ARIMA & MAE: 27.1, RMSE: 58.3 \\
+\cline{3-4} 
+ &  & GBRT &  MAE: 22.3, RMSE: 47.7 \\
+\cline{3-4} 
+ &  & Seq2Seq &  MAE: 17.8, RMSE: 35.1 \\ 
+ \cline{3-4} 
+ &  & GAT-SeqSeq & MAE: 16.3, RMSE: 31.9  \\ 
+ \cline{3-4} 
+  &  & ST-ResNet & MAE: 16.8, RMSE: 31.9  \\ 
+ \cline{3-4} 
+ &  & ST-MetaNet & MAE: 15.0, RMSE: 29.9 \\
+ \cline{3-4} 
+\hline
+
+
+\multirow{2}{*}{\cite{Guo2019}}
+& \multirow{2}{*}{\shortstack{PeMSD8\\(horison 60 menit)}}
+& HA & MAE: 29.52, RMSE: 44.03 \\
+\cline{3-4} 
+ &  & ARIMA & MAE: 24.04, RMSE: 43.30 \\
+\cline{3-4} 
+ &  & VAR &  MAE: 21.41, RMSE: 31.21 \\
+\cline{3-4} 
+ &  & LSTM &  MAE: 23.18, RMSE: 36.96 \\ 
+ \cline{3-4} 
+ &  & GRU & MAE: 22.20, RMSE: 35.95  \\ 
+ \cline{3-4} 
+  &  & STGCN & MAE: 18.88, RMSE: 27.87  \\ 
+ \cline{3-4} 
+ &  & GLU-STGCN & MAE: 20.99, RMSE: 30.78 \\
+ \cline{3-4} 
+&  & GeoMAN & MAE: 17.84, RMSE: 28.91 \\
+ \cline{3-4} 
+&  & ASTGCN & MAE: 16.63, RMSE: 25.27 \\
+ \cline{3-4} 
+\hline
+
+\multirow{2}{*}{\cite{Bai2020}}
+& \multirow{2}{*}{\shortstack{PeMSD8\\(horison 60 menit)}}
+& HA & MAE: 34.86, RMSE: 52.04 \\
+\cline{3-4} 
+ &  & VAR & MAE: 19.19, RMSE: 29.81 \\
+\cline{3-4} 
+ &  & GRU-ED &  MAE: 22.00, RMSE: 36.23 \\
+\cline{3-4} 
+ &  & DSANet &  MAE: 17.14, RMSE: 26.96 \\ 
+ \cline{3-4} 
+ &  & DCRNN & MAE: 16.82, RMSE: 26.36  \\ 
+ \cline{3-4} 
+  &  & STGCN & MAE: 17.50, RMSE: 27.09  \\ 
+ \cline{3-4} 
+ &  & ASTGCN & MAE: 18.25, RMSE: 28.06 \\
+ \cline{3-4} 
+&  & STSGCN & MAE: 17.13, RMSE: 26.86 \\
+ \cline{3-4} 
+&  & AGCRN & MAE: 15.95, RMSE: 25.22 \\
+ \cline{3-4} 
+\hline
+
+\end{longtable}
+
+
+
+
+%-----------------------------------------------------------------
+% Akhir BAB 2
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+% Awal BAB 3
+%-----------------------------------------------------------------
+\chapter{DASAR TEORI}
+\label{DASAR TEORI}
+
+	\section{Time Dependent Customizable Route Planning}
+	\label{time dependent customizable route planning}
+	\input{BAB_SKRIPSI/BAB3/1_TIME_DEPENDENT_CUSTOMIZABLE_ROUTE_PLANNING_.tex}
+
+	\section{Online Map-Matching Menggunakan Multiple Hypothesis Technique}
+	\label{multiple hypothesis technique}
+		\input{BAB_SKRIPSI/BAB3/2_ONLINE_MAP_MATCHING_MHT.tex}
+
+    \section{Traffic Forecasting Dengan Menggunakan Multivariate Time-Series Graph Neural Network}
+    \label{mtgnn-section}
+    \input{BAB_SKRIPSI/BAB3/3_TRAFFIC_FORECASTING_GNN.tex}
+    
+     \section{Pencarian Rute Alternative Dengan Metode Heuristik Admissible Paths}
+    \label{alternative-routes}
+    \input{BAB_SKRIPSI/BAB3/4_ALTERNATIVE_ROUTES.tex}
+
+    \section{Mempartisi Graf Jaringan Jalan Dengan Algoritma Inertial Flow}
+    \label{alternative-routes}
+    \input{BAB_SKRIPSI/BAB3/5_INERTIAL_FLOW.tex}
+%-----------------------------------------------------------------
+% Akhir BAB 3
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+% Awal BAB 4
+%-----------------------------------------------------------------
+\chapter{ANALISIS DAN PERANCANGAN SISTEM}
+\label{ANALISIS DAN PERANCANGAN SISTEM}
+
+	\section{Deskripsi Umum Sistem}
+	\label{rancangan deskripsi umum sistem}
+	\input{BAB_SKRIPSI/BAB4/1_DESKRIPSI_UMUM}
+
+	\section{Analisis Kebutuhan Sistem}
+	\label{rancangan analisis kebutuhan sistem}
+	\input{BAB_SKRIPSI/BAB4/2_ANALISIS_KEBUTUHAN_SISTEM}
+
+	\section{Pembuatan Sistem}
+	\label{rancangan pembuatan sistem}
+
+		\subsection{Pembuatan Sistem Pengenalan Entitas Bernama}
+		\label{rancangan pembuatan sistem pengenalan entitas bernama}
+		\input{BAB_SKRIPSI/BAB4/3_2_SISTEM_PENGENALAN_ENTITAS_BERNAMA}
+
+		\subsection{Pembuatan Sistem Ekstraksi Kalimat Pernyataan}
+		\label{rancangan sistem ekstraksi kalimat pernyataan}
+		\input{BAB_SKRIPSI/BAB4/3_3_SISTEM_EKSTRAKSI_KALIMAT_PERNYATAAN}
+
+	\section{Rancangan Antarmuka}
+	\label{rancangan antarmuka}
+
+		\subsection{Deskripsi}
+		\label{rancangan deskripsi antarmuka}
+		\input{BAB_SKRIPSI/BAB4/4_1_DESKRIPSI_RANCANGAN_ANTARMUKA}
+
+		\subsection{\textit{Wireframe}}
+	    \label{rancangan wireframe antarmuka}
+	    \input{BAB_SKRIPSI/BAB4/4_2_WIREFRAME_ANTARMUKA}
+
+%-----------------------------------------------------------------
+% Akhir BAB 4
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+% Awal BAB 5
+%-----------------------------------------------------------------
+\chapter{IMPLEMENTASI SISTEM}
+\label{IMPLEMENTASI SISTEM}
+
+	\section{Spesifikasi}
+	\label{implementasi spesifikasi}
+	\input{BAB_SKRIPSI/BAB5/1_SPESIFIKASI}
+
+	\section{Implementasi Sistem Pengenalan Entitas Bernama}
+	\label{implementasi sistem ner}
+	\input{BAB_SKRIPSI/BAB5/2_1_IMPLEMENTASI_SISTEM_NER}
+
+	\section{Implementasi Sistem Ekstraksi Kalimat Pernyataan}
+	\label{implementasi sistem ekstraksi kalimat pernyataan}
+	\input{BAB_SKRIPSI/BAB5/2_2_IMPLEMENTASI_SISTEM_EKTRAKSI_KALIMAT_PERNYATAAN}
+
+%-----------------------------------------------------------------
+% Akhir BAB 5
+%-----------------------------------------------------------------
+
+
+
+%-----------------------------------------------------------------
+% Awal BAB 6
+%-----------------------------------------------------------------
+\chapter{PENGUJIAN DAN PEMBAHASAN SISTEM}
+\label{PENGUJIAN DAN PEMBAHASAN SISTEM}
+\input{BAB_SKRIPSI/BAB6/1_PENDAHULUAN}
+
+	\section{Pengujian Sistem Pengenalan Entitas Bernama}
+	\label{pengujian sistem ner}
+	\input{BAB_SKRIPSI/BAB6/2_PENGUJIAN_SISTEM_NER}
+
+	\section{Pengujian Sistem Ekstraksi Kalimat Pernyataan}
+	\label{pengujian sistem ekstraksi kalimat pernyataan}
+	\input{BAB_SKRIPSI/BAB6/3_PENGUJIAN_SISTEM_EKSTRAKSI_KALIMAT_PERNYATAAN}
+
+%-----------------------------------------------------------------
+% Akhir BAB 6
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+% Awal BAB 7
+%-----------------------------------------------------------------
+\chapter{PENUTUP}
+\label{PENUTUP}
+
+	\section{Kesimpulan}
+	\label{penutup kesimpulan}
+	\input{BAB_SKRIPSI/BAB7/1_KESIMPULAN}
+
+	\section{Saran}
+	\label{penutup saran}
+	\input{BAB_SKRIPSI/BAB7/2_SARAN}
+
+%-----------------------------------------------------------------
+% Akhir BAB 7
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+% Awal Daftar Pustaka
+%-----------------------------------------------------------------
+\input{BAB_SKRIPSI/BAB8_DAFTAR_PUSTAKA/1_DAFTAR_PUSTAKA_MIPA}
+%-----------------------------------------------------------------
+% Akhir Daftar Pustaka
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+% Awal lampiran
+%-----------------------------------------------------------------
+\appendix
+
+\chapter{BERKAS JSON UNTUK MODEL SISTEM PENGENALAN ENTITAS BERNAMA}
+\label{BERKAS JSON UNTUK MODEL SISTEM PENGENALAN ENTITAS BERNAMA}
+\input{BAB_SKRIPSI/BAB9_LAMPIRAN/1_BERKAS_MODEL_NER}
+
+%-----------------------------------------------------------------
+% Akhir lampiran
+%-----------------------------------------------------------------
+
+\end{document}
