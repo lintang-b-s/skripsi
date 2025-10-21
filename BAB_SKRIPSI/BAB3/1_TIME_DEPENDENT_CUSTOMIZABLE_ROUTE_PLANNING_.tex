@@ -4,7 +4,7 @@ Diberikan sebuah graf $G=(V,A)$, dengan setiap sisi $(v,w)\in A$ memiliki fungsi
 
 Sebuah partisi dari simpul-simpul $V$ adalah sebuah himpunan sel-sel $\mathcal{C}=\{C_0,\ldots, C_k\}, C_i\subseteq V$ dengan setiap simpul $v\in V$ terkandung didalam satu sel $C_i$. Misalkan $U$ adalah jumlah simpul dari sel terbesar. Partisi \textit{multilevel} dari $V$ adalah himpunan partisi $\{\mathcal{C}^{0},\ldots, \mathcal{C}^{L}\}$, dimana $l$ adalah \textit{level} dari partisi $\mathcal{C}^{l}$ dan $U^{l}$ merepresentasikan ukuran dari sel terbesar pada level $l$. $L$ adalah jumlah level dari  partisi \textit{multilevel}. $U^{0}=1$ atau dengan kata lain $U^{0}$ adalah $singleton$. Penulis juga menetapkan $\mathcal{C}^{L+1}=V$ untuk menandakan partisi pada level $L+1$ adalah graf orisinil. Untuk setiap level $l\leq L$ dan untuk setiap sel $C_{i}^{l}\in\mathcal{C}^l$, terdapat sebuah sel $C_{j}^{l+1}\in\mathcal{C}^{l+1} \text{ disebut sebagai \textit{supercell} dari } C_i^l$ dengan $C_i^l\subseteq C_j^{l+1}$. $c_l(v)$ adalah sel yang berisi simpul $v$ pada level $l$. Pada setiap level $l$ terdapat sisi batas dengan $endpoints$ terdapat pada sel yang berbeda pada level-$l$. Simpul batas pada level $l$ adalah simpul dengan setidaknya memiliki satu tetangga yang berada pada sel lain pada level $l$.  Untuk partisi \textit{multilevel}, sisi batas pada level $l$ juga merupakan sisi batas pada level dibawah $l$.
 
-Dalam Time Dependent Customizable Route Planning, setiap sisi $a$ memiliki bobot berupa \textit{travel-time function} (TTF) $f_a:\Pi\rightarrow \mathbb{R}^{+}$, memetakan waktu keberangkatan ke waktu tempuh. Semua \textit{travel-time function} adalah \textit{continuous piecewiese linear function} dengan periode $\pi$ dan memiliki rentang nilai $\Pi=[0,\pi]$. Diberikan sebuah fungsi $f$, jumlah \textit{breakpoints} dari $f$ adalah $\mid f\mid $. Nilai maksimum dari $f$ didefinisikan dengan $f^{max}=\max_{\tau\in\Pi}f(\tau)$ dan nilai minimum dari $f$ didefinisikan dengan $f^{min}=\min_{\tau\in\Pi}f(\tau)$. \textit{Travel-time function} memenuhi sifat \textit{FIFO}, yaitu untuk bilangan riil positif sembarang $\sigma\leq\tau\in\Pi$, kondisi $\sigma+f(\sigma)\leq \tau+f(\tau)$ harus berlaku. Operasi \textit{link} didefinisikan dengan $link(f,g)=f+g \ \circ \ (identity+f)$. Operasi \textit{merge} didefinisikan dengan $merge(f,g)=min(f,g)$. Kedua operasi tersebut memiliki kompleksitas waktu $O(\mid f\mid +\mid g\mid )$. Diberikan rute $P=[v_1,\ldots,v_k]$, \textit{travel-time profile} (TTP) didefinisikan dengan $f_P:\Pi\rightarrow \mathbb{R}^{+}$, yang memetakan waktu keberangkatan $\tau$ (pada \textit{v1}) ke \textit{travel time} pada $P$ untuk menuju ke $v_k$. \textit{Arrival time function} $arr f:\tau\rightarrow f(\tau)+\tau$, memetakan waktu keberangkatan $\tau$ ke waktu kedatangan setelah melintasi sisi yang memiliki TTF $f$. 
+Dalam Time Dependent Customizable Route Planning, setiap sisi $a$ memiliki bobot berupa \textit{travel-time function} (TTF) $f_a:\Pi\rightarrow \mathbb{R}^{+}$, memetakan waktu keberangkatan ke waktu tempuh. Semua \textit{travel-time function} adalah \textit{continuous piecewiese linear function} dengan periode $\pi$ dan memiliki rentang nilai $\Pi=[0,\pi]$. Diberikan sebuah fungsi $f$, jumlah \textit{breakpoints} dari $f$ adalah $\mid f\mid $. Nilai maksimum dari $f$ didefinisikan dengan $f^{max}=\max_{\tau\in\Pi}f(\tau)$ dan nilai minimum dari $f$ didefinisikan dengan $f^{min}=\min_{\tau\in\Pi}f(\tau)$. \textit{Travel-time function} memenuhi sifat \textit{FIFO}, yaitu untuk bilangan riil positif sembarang $\sigma\leq\tau\in\Pi$, kondisi $\sigma+f(\sigma)\leq \tau+f(\tau)$ harus berlaku. Operasi \textit{link} didefinisikan dengan $link(f,g)=f+g \ \circ \ (identity+f)$. Operasi \textit{merge} didefinisikan dengan $merge(f,g)=min(f,g)$. Kedua operasi tersebut memiliki kompleksitas waktu $O(\mid f\mid +\mid g\mid )$. Diberikan rute $P=[v_1,\ldots,v_k]$, \textit{travel-time profile} (TTP) didefinisikan dengan $f_P:\Pi\rightarrow \mathbb{R}^{+}$, yang memetakan waktu keberangkatan $\tau$ (pada $v_1$) ke \textit{travel time} pada $P$ untuk menuju ke $v_k$. \textit{Arrival time function} $arr f:\tau\rightarrow f(\tau)+\tau$, memetakan waktu keberangkatan $\tau$ ke waktu kedatangan setelah melintasi sisi yang memiliki TTF $f$. 
 
 Diberikan waktu keberangkatan $\tau$ dan simpul asal $s$ dan simpul target $t$, kueri \textit{earliest-arrival} (EA) menanyakan waktu tempuh minimum dari $s$ ke $t$ ketika berangkat pada waktu $\tau$. Kueri \textit{latest-departure} (LD) menanyakan waktu tempuh minimum yang mencapai simpul $t$ pada waktu $\tau$. Kueri profil menanyakan waktu tempuh minimum pada setiap kemungkinan waktu keberangkatan $\tau$, yaitu profil $f_{s,t}$ dari $s$ ke $t$. Kueri EA dapat ditangani dengan algoritma Time-Dependent Dijkstra yang pseudocodenya diberikan oleh algoritma~\ref{alg:td-dijkstra}. Kueri profile dapat ditangani dengan algoritma ProfileSearch yang pseudocodenya diberkan oleh algoritma~\ref{alg:profileSearch}
 
@@ -69,7 +69,7 @@ Pada tahapan prapemrosesan, penulis membuat partisi \textit{multilevel} dari gra
 \end{figure}
 
 
-Untuk setiap sisi batas $(u,v)$, penulis menyimpan simpul \textit{overlay} $u'_{H}$ dan $v_{H}''$, dimana simpul $u'_{H}$  adalah simpul \textit{exit} dari sel $c_1(u)$ dan $v_{H}''$ adalah simpul \textit{entry} dari sel $c_1(v)$. Jika sisi $(v,u)$ juga terdapat dalam graf, maka kita juga menambahkan simpul $v'_H$ dan $u''_{H}$. Unutk meningkatkan lokalitas, kita mengurutkan ID dari simpul \textit{overlay} sedemikian hingga simpul batas dengan level tertinggi memiliki ID terendah, diikuti dengan simpul batas dengan level tetinggi kedua, dan seterusnya. Gambar~\ref{fig:crp-overlay} menunjukkan ilustrasi dari sisi batas dan simpul \textit{overlay}/batas. Penulis membuat struktur data \textit{hash table} dengan \textit{key} berupa \textit{struct} berisi field simpul, \textit{turn order}, tipe simpul (\textit{exit} atau \textit{entry}) dengan value nya adalah ID dari simpul \textit{overlay}. Untuk menyimpan bobot dari sisi-sisi jalan pintas yang menghubungkan simpul-simpul \textit{overlay}/batas pada setiap sel di setiap level, penulis membuat struktur data \textit{array} satu dimensi bobot sisi jalan pintas W. Untuk setiap sel $C$  di dalam graf \textit{overlay} di setiap level, kita menyimpan $p_C$ (jumlah dari titik \textit{entry} dari sel), $q_C$ (jumlah dari titik \textit{exit} dari sel), dan $f_C$ (posisi di dalam \textit{array} $W$, dimana entri pertama dari matrix bobot dari sel $C$ disimpan), kita dapat mendapatkan bobot/biaya dari sisi jalan pintas antara titik \textit{entry} ke-$i$ dan titik \textit{exit} ke-$j$ dari sel $C$ dari $W[f_C+i\cdot q_C + j]$. Untuk dapat memetakan posisi simpul diantara simpul-simpul \textit{exit} atau \textit{entry} dari sel simpul ke ID dari simpul overlay nya, penulis membuat \textit{hash table} yang memetakan posisi \textit{entry}/\textit{exit} ke-$i$ dari sel $C$ pada level $l$ ke ID dari simpul \textit{overlay} yang bersesuaian. Untuk setiap simpul \textit{overlay} $v$, penulis juga menyimpan \textit{array} berukuran $L$ yag setiap indeksnya menyimpan posisi titik \textit{entry/exit} dari simpul pada sel dimana simpul berada.
+Untuk setiap sisi batas $(u,v)$, penulis menyimpan simpul \textit{overlay} $u'_{H}$ dan $v_{H}''$, dimana simpul $u'_{H}$  adalah simpul \textit{exit} dari sel $c_1(u)$ dan $v_{H}''$ adalah simpul \textit{entry} dari sel $c_1(v)$. Jika sisi $(v,u)$ juga terdapat dalam graf, maka kita juga menambahkan simpul $v'_H$ dan $u''_{H}$. Unutk meningkatkan lokalitas, kita mengurutkan ID dari simpul \textit{overlay} sedemikian hingga simpul batas dengan level tertinggi memiliki ID terendah, diikuti dengan simpul batas dengan level tetinggi kedua, dan seterusnya. Gambar~\ref{fig:crp-overlay2} menunjukkan ilustrasi dari sisi batas dan simpul \textit{overlay}/batas. Penulis membuat struktur data \textit{hash table} dengan \textit{key} berupa \textit{struct} berisi field simpul, \textit{turn order}, tipe simpul (\textit{exit} atau \textit{entry}) dengan value nya adalah ID dari simpul \textit{overlay}. Untuk menyimpan bobot dari sisi-sisi jalan pintas yang menghubungkan simpul-simpul \textit{overlay}/batas pada setiap sel di setiap level, penulis membuat struktur data \textit{array} satu dimensi bobot sisi jalan pintas W. Untuk setiap sel $C$  di dalam graf \textit{overlay} di setiap level, kita menyimpan $p_C$ (jumlah dari titik \textit{entry} dari sel), $q_C$ (jumlah dari titik \textit{exit} dari sel), dan $f_C$ (posisi di dalam \textit{array} $W$, dimana entri pertama dari matrix bobot dari sel $C$ disimpan), kita dapat mendapatkan bobot/biaya dari sisi jalan pintas antara titik \textit{entry} ke-$i$ dan titik \textit{exit} ke-$j$ dari sel $C$ dari $W[f_C+i\cdot q_C + j]$. Untuk dapat memetakan posisi simpul diantara simpul-simpul \textit{exit} atau \textit{entry} dari sel simpul ke ID dari simpul overlay nya, penulis membuat \textit{hash table} yang memetakan posisi \textit{entry}/\textit{exit} ke-$i$ dari sel $C$ pada level $l$ ke ID dari simpul \textit{overlay} yang bersesuaian. Untuk setiap simpul \textit{overlay} $v$, penulis juga menyimpan \textit{array} berukuran $L$ yag setiap indeksnya menyimpan posisi titik \textit{entry/exit} dari simpul pada sel dimana simpul berada.
 
 
 
@@ -77,7 +77,7 @@ Untuk setiap sisi batas $(u,v)$, penulis menyimpan simpul \textit{overlay} $u'_{
     \centering
     \includegraphics[]{figures/overlay_crp.png}
     \caption{graf \textit{overlay} yang terdiri dari sisi batas $(u,v)$, $(v,u)$, dan $(w,v)$ menghasilkan simpul \textit{overlay} $u'_{H},v_H'',v'_H,u''_H,w'_H, \text{ dan }v'''_H$ }
-    \label{fig:crp-overlay}
+    \label{fig:crp-overlay2}
 \end{figure}
 
 
@@ -475,7 +475,7 @@ Penulis melakukan beberapa optimasi untuk mempercepat algoritma kueri. Pada saat
         \If{$v\notin Q$}
             \State $Q.insert(v,\tau[v])$
         \Else
-            $Q.decreaseKey(v,\tau[v])$
+           \State $Q.decreaseKey(v,\tau[v])$
         \EndIf
     \EndProcedure
     \State $Q=\{s,\tau[s]\}: PriorityQueue$
@@ -499,7 +499,7 @@ Penulis melakukan beberapa optimasi untuk mempercepat algoritma kueri. Pada saat
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.9}
-\Procedure{tdDijkstra}{$s: V, \tau_0: \mathbb{R}$}
+\Procedure{ProfileSearch}{$s: V, \tau_0: \mathbb{R}$}
     \State $\tau[u]=\infty\text{ untuk semua } u\in V, \tau[s]=\tau_0$ \Comment{nilai awal label simpul}
     \State $p[u]=\emptyset \text{ untuk semua }u\in V$  \Comment{nilai awal informasi \textit{predecessor}}
     \Procedure{profileRelax}{$u,v:V,g_{new}: TTF, f,p, Q: PriorityQueueReference$}
@@ -538,7 +538,7 @@ Algoritma kueri paling banyak akan mengunjungi semua simpul dari sel $s$ pada le
 
 \subsection{Fase Kustomisasi Bergantung Pada Waktu}
 \label{subsec:tdcrp-timedependent-customization}
-Kustomisasi untuk Time-Dependent Customizable Route Planning dilakukan dengan menjalankan algoritma ProfilSearch~\ref{alg:profileSearch} dari setiap simpul batas \textit{entry} $u\in C$ pada semua sel $C\in\mathcal{C}^{i}, i\geq 1$ ke setiap simpul batas \textit{exit} $v\in C$ lain untuk mendapatkan \textit{time-dependent shortcuts}.  Tetapi, pada level i > 1, algoritma ProfileSearch dijalankan pada subgraf dari $H_{i-1}$ menggunakan sisi-sisi jalan pintas dari subsel-subsel dari sel $C\in\mathcal{C}^i, i>1$. Optimasi dapat dilakukan dengan memanfaatkan $f^{\max}\text{ dan }f^{\min} \text{ dari setiap \textit{travel-time-profile} } f $. Sebelum merelaksasi sisi $(u,v)$, cek apakah $f_{u}^{\min}+f_{(u,v)}^{\min}\leq f^{max}$, yaitu nilai minimum dari hasil operasi $link(f_u,f_{uv})$ kurang dari sama dengan nilai maksimum label pada simpul $v$. Jika kondisi ini terpenuhi, lakukan relaksasi sisi $(u,v)$. Setelah menjalankan operasi $link(f_u,f_{uv})$, kita mendapatkan nilai label tentatif $\tilde{f}_v$,$\tilde{f}_v^{max}$, dan $\tilde{f}_v^{min}$. Jika kondisi $\tilde{f}_v^{min}>f_v^{max}$, operasi $merge(f_u,f_{uv}\ \circ \ f[u])$ tidak perlu dijalankan. Jika kondisi $\tilde{f}_v^{max}<f_v^{min}$, ganti $f_v$ dengan $\tilde{f}_v$. Jika kedua kondisi tersebut tidak dipenuhi, jalankan operasi $merge(f_u,f_{uv}\ \circ \ f[u])$. Penulis menjalanakan fase kustomisasi dengan memanfaatkan $multithreading$, dimana setiap sel diproses di \textit{thread} yang berbeda.
+Untuk mengadaptasi Customizable Route Planning pada graf yang bergantung pada waktu, penulis menggunakan metode Time-Dependent Customizable Route Planning yang diperkenalkan pada penelitian oleh \cite{Baum2016}. Kustomisasi untuk Time-Dependent Customizable Route Planning dilakukan dengan menjalankan algoritma ProfilSearch~\ref{alg:profileSearch} dari setiap simpul batas \textit{entry} $u\in C$ pada semua sel $C\in\mathcal{C}^{i}, i\geq 1$ ke setiap simpul batas \textit{exit} $v\in C$ lain untuk mendapatkan \textit{time-dependent shortcuts}.  Tetapi, pada level i > 1, algoritma ProfileSearch dijalankan pada subgraf dari $H_{i-1}$ menggunakan sisi-sisi jalan pintas dari subsel-subsel dari sel $C\in\mathcal{C}^i, i>1$. Optimasi dapat dilakukan dengan memanfaatkan $f^{\max}\text{ dan }f^{\min} \text{ dari setiap \textit{travel-time-profile} } f $. Sebelum merelaksasi sisi $(u,v)$, cek apakah $f_{u}^{\min}+f_{(u,v)}^{\min}\leq f^{max}$, yaitu nilai minimum dari hasil operasi $link(f_u,f_{uv})$ kurang dari sama dengan nilai maksimum label pada simpul $v$. Jika kondisi ini terpenuhi, lakukan relaksasi sisi $(u,v)$. Setelah menjalankan operasi $link(f_u,f_{uv})$, kita mendapatkan nilai label tentatif $\tilde{f}_v$,$\tilde{f}_v^{max}$, dan $\tilde{f}_v^{min}$. Jika kondisi $\tilde{f}_v^{min}>f_v^{max}$, operasi $merge(f_u,f_{uv}\ \circ \ f[u])$ tidak perlu dijalankan. Jika kondisi $\tilde{f}_v^{max}<f_v^{min}$, ganti $f_v$ dengan $\tilde{f}_v$. Jika kedua kondisi tersebut tidak dipenuhi, jalankan operasi $merge(f_u,f_{uv}\ \circ \ f[u])$. Penulis menjalanakan fase kustomisasi dengan memanfaatkan $multithreading$, dimana setiap sel diproses di \textit{thread} yang berbeda.
 
 
 \subsection{Integrasi Dengan Data Lalu Lintas Terbaru dan Prediksi Kecepatan Lalu Lintas}
@@ -620,7 +620,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
                 \If{$v\notin Q$}
                     \State $Q.insert(v,GetEntryPos(v),\tau[v])$
                 \Else
-                    $Q.decreaseKey(v,GetEntryPos(v),\tau[v])$
+                   \State $Q.decreaseKey(v,GetEntryPos(v),\tau[v])$
                 \EndIf
             \EndIf
         \Else
@@ -631,7 +631,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
                 \If{$vOverlay \notin overlayQ$}
                     \State $overlayQ.insert(vOverlay,\tau[vOverlay])$
                 \Else
-                    $overlayQ.decreaseKey(vOverlay,\tau[vOverlay])$
+                   \State $overlayQ.decreaseKey(vOverlay,\tau[vOverlay])$
                 \EndIf
             \EndIf
         \EndIf
@@ -658,7 +658,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
                     \If{$w\notin Q$}
                         \State $Q.insert(w,GetEntryPos(w),\tau[w])$
                     \Else
-                        $Q.decreaseKey(w,GetEntryPos(w),\tau[w])$
+                     \State   $Q.decreaseKey(w,GetEntryPos(w),\tau[w])$
                     \EndIf
                 \EndIf
             \Else
@@ -668,7 +668,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
                     \If{$w\notin overlayQ$}
                         \State $overlayQ.insert(w,\tau[w])$
                     \Else
-                        $overlayQ.decreaseKey(w,\tau[w])$
+                      \State  $overlayQ.decreaseKey(w,\tau[w])$
                     \EndIf
                 \EndIf          
             \EndIf
