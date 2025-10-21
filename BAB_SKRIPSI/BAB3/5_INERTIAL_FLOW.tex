@@ -36,7 +36,7 @@ Diberikan graf tidak berarah $G=(V,E)$,  \textit{graph partitioning} adalah pros
         \State $bestpart_2 \gets \emptyset$
         \State $bestCutEdgesCount \gets \infty$
         \For {$line \in lines$}
-            \State $(sources,sinks_ \gets $\Call{SortVerticesByLineProjection}{$line, currPartitionGraph$}
+            \State $(sources,sinks) \gets $\Call{SortVerticesByLineProjection}{$line, currPartitionGraph$}
             \State $s,t \gets$ \Call{createArtificialSourceSink}{$sources,sinks$}
             \State $(cutEdges, part_1, part_2) \gets$ \Call{Dinic}{$s,t, currPartitionGraph$}
             \If{$cutEdges < bestCutEdgesCount$}
@@ -85,7 +85,7 @@ Diberikan graf tidak berarah $G=(V,E)$,  \textit{graph partitioning} adalah pros
     \EndFor 
     \State $levels \gets \emptyset $
     \While{$true$}
-        \If {\Call{bfsLevelGraph}{$s,t, currPartitionGraph, levels$}}
+        \If {\Call{bfsLevelGraph}{$s,t, currPartitionGraph, levels$} $=true$}
             \While{$true$}
                 \State $flow \gets$ \Call{dfsAugmentPath}{$s,t, \infty, currPartitionGraph, levels$}
                 \If {$flow = 0$}

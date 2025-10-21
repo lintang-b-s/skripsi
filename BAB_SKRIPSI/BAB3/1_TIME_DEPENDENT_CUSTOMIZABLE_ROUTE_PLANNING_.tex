@@ -543,11 +543,11 @@ Untuk mengadaptasi Customizable Route Planning pada graf yang bergantung pada wa
 
 \subsection{Integrasi Dengan Data Lalu Lintas Terbaru dan Prediksi Kecepatan Lalu Lintas}
 \label{subsec:tdcrp-traffic-update}
-Kustomisasi saat terjadi pembaruan data lalu lintas hanya dilakukan pada sel-sel $C$ yang terdampak pada pembaruan. Misalkan $e_1=(u_1,v_1),\ldots,e_k=(u_k,v_k)$ adalah sisi-sisi di dalam suatu sel $C_i^l \text{ pada level }l$ yang bobotnya diperbarui akibat data pembaruanlalu lintas atau prediksi lalu lintas. Semua pembaruan data lalu lintas diberikan sebagai fungsi parsial $f:[\pi',\pi'']\rightarrow \mathbb{R}^+$, dimana $\pi'\in \Pi \text{ dan }\pi''\in \Pi$ secara berturut-turut adalah awal dan akhir dari rentang waktu dari pembaruan data lalu lintas. Misalkan $f_1,\ldots,f_k$ adalah fungsi parsial dari setiap sisi yang diperbarui dan $\tau$ adalah waktu saat pembaruan data lalu lintas dilakukan.  Untuk memperbarui sisi-sisi jalan pintas dalam sel-sel dari $C_i^l$, jalankan kueri LD dari simpul-simpul $head$ dari semua sisi yang diperbarui. Kustomisasi diawali dengan memasukkan $u_1,\ldots,u_k$ ke dalam Priority Queue dan menetapkan label waktu tempuh dari $u_i,i\in\{1,\ldots,k\}$ dengan $\pi''$. Sisi-sisi batas yang terjangkau oleh kueri LD ditandai sebagai terdampak oleh pembaruan data lalu lintas. Pencarian dihentikan ketika label waktu tempuh dari simpul yang baru saja \textit{settled} dibawah $\tau$. Kustomisasi dilanjutkan dengan menjalankan alogoritma ProfileSearch~\ref{alg:profileSearch} pada simpul-simpul yang ditandai pada sel $C_i^l$.
+Kustomisasi saat terjadi pembaruan data lalu lintas hanya dilakukan pada sel-sel $C$ yang terdampak pada pembaruan. Misalkan $e_1=(u_1,v_1),\ldots,e_k=(u_k,v_k)$ adalah sisi-sisi di dalam suatu sel $C_i^l \text{ pada level }l$ yang bobotnya diperbarui akibat data pembaruanlalu lintas atau prediksi lalu lintas. Semua pembaruan data lalu lintas diberikan sebagai fungsi parsial $f:[\pi',\pi'']\rightarrow \mathbb{R}^+$, dimana $\pi'\in \Pi \text{ dan }\pi''\in \Pi$ secara berturut-turut adalah awal dan akhir dari rentang waktu dari pembaruan data lalu lintas. Misalkan $f_1,\ldots,f_k$ adalah fungsi parsial dari setiap sisi yang diperbarui dan $\tau$ adalah waktu saat pembaruan data lalu lintas dilakukan.  Untuk memperbarui sisi-sisi jalan pintas dalam sel-sel dari $C_i^l$, jalankan kueri LD dari simpul-simpul $tail$ dari semua sisi yang diperbarui. Kueri LD mengunjungi simpul-simpul dengan waktu keberangkatan yang menurun. Dengan kata lain, relaksasi sisi pada kueri LD menggunakan operasi pengurangan alih-alih penambahan dan Priority Queue menggunakan \textit{max heap} alih-alih \textit{min-heap}. Kustomisasi diawali dengan memasukkan $u_1,\ldots,u_k$ ke dalam Priority Queue dan menetapkan label waktu keberangkatan dari $u_i,i\in\{1,\ldots,k\}$ dengan $\pi''$. Sisi-sisi batas yang terjangkau oleh kueri LD ditandai sebagai terdampak oleh pembaruan data lalu lintas. Pencarian dihentikan ketika label waktu keberangkatan dari simpul yang baru saja \textit{settled} dibawah $\tau$. Kustomisasi dilanjutkan dengan menjalankan alogoritma ProfileSearch~\ref{alg:profileSearch} pada simpul-simpul yang ditandai pada sel $C_i^l$.
 
 \subsection{Fase Kueri Bergantung Pada Waktu}
 \label{subsec:tdcrp-time-dependent-query}
-Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama dengan algoritma kueri Time-Independent Customizable Route Planning. Perbedaannya, kueri dijalankan satu arah saja dan menggunakan Time-Dependent Dijkstra yang dimodifikasi. Modifikasi algoritma Time-Dependent Dijsktra diperlukan agar pencarian dapat memanfaatkan sisi-sisi jalan pintas pada graf \textit{overlay}, sehingga ruang pencarian dipangkas. Kompleksitas waktu dari algoritma kueri adalah $O(E_1+U_1\log U_1+B^{2}+B \log B)$. Hal ini disebabkan karena algoritma kueri paling banyak akan mengunjungi semua simpul dari sel $s$ pada level 1, semua simpul dari sel $t$ pada level 1, dan semua simpul batas dari semua sel dari setiap level graf overlay. 
+Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama dengan algoritma kueri Time-Independent Customizable Route Planning. Perbedaannya, kueri dijalankan satu arah saja dan menggunakan Time-Dependent Dijkstra yang dimodifikasi. Modifikasi algoritma Time-Dependent Dijsktra diperlukan agar pencarian dapat memanfaatkan sisi-sisi jalan pintas pada graf \textit{overlay}, sehingga ruang pencarian dipangkas. Pseudocode dari algoritma kueri Time-Dependent Customizable Route Planning ditunjukkan pada Algoritma~\ref{alg:td-dijkstra-crp}. Kompleksitas waktu dari algoritma kueri adalah $O(E_1+U_1\log U_1+B^{2}+B \log B)$. Hal ini disebabkan karena algoritma kueri paling banyak akan mengunjungi semua simpul dari sel $s$ pada level 1, semua simpul dari sel $t$ pada level 1, dan semua simpul batas dari semua sel dari setiap level graf overlay. 
 
 
 
@@ -559,12 +559,12 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.9}
-\Procedure{tdDijkstraCRP}{$s,t: V, \tau_0: \mathbb{R}$}: $(\mathbb{R}, Set, Set, Set)$
+\Procedure{tdDijkstraCRP}{$a_s,a_t: V, \tau_0: \mathbb{R}$}: $(\mathbb{R}, Set, Set, Set)$
     \State $\tau[u]=\infty\text{ untuk semua } u\in V, \tau[s]=\tau_0$ \Comment{nilai awal label simpul}
     \State $p[u]=\bot \text{ untuk semua }u\in V$  \Comment{nilai awal informasi \textit{predecessor}}
     
 
-    \State $Q=\{s,sEntryPos,\tau[s]\}: PriorityQueue$
+    \State $Q=\{as.head,as.entryPos,\tau[s]\}: PriorityQueue$
     \State $shortestTimeTravel=\infty$
     \State $overlayQ =\emptyset: PriorityQueue $
     \While{$Q \neq \emptyset \textbf{ or } overlayQ\neq \emptyset $}
@@ -607,7 +607,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.9}
-    \Procedure{tdRelaxCRP}{$u\rightarrow_fv: Edge,v,u,uEntryPos, \tau, p, Q,overlayQ,turnCost_{uv}$}
+    \Procedure{tdRelaxCRP}{$arc: Edge \ u\rightarrow_fv,v,u,uEntryPos, \tau, p, Q,overlayQ,turnCost_{uv}$}
         \If{$arr f(\tau[u])\geq\tau[v] $}
             \State \textbf{return}
         \EndIf
@@ -618,13 +618,13 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
                 \State $\tau[v]=\min\{\tau[v],(arr f(\tau[u])+turnCost_{uv})\}$  \Comment{perbarui label simpul $v$. $O(\mid f_u\mid +\mid f_{uv}\mid )$}
                 \State $p[v]=u$     \Comment{perbarui informasi \textit{predecessor} dari $v$}
                 \If{$v\notin Q$}
-                    \State $Q.insert(v,GetEntryPos(v),\tau[v])$
+                    \State $Q.insert(v,G.entryPos[arc, v],\tau[v])$
                 \Else
-                   \State $Q.decreaseKey(v,GetEntryPos(v),\tau[v])$
+                   \State $Q.decreaseKey(v,G.entryPos[arc, v],\tau[v])$
                 \EndIf
             \EndIf
         \Else
-            \State $vOverlay=GetOverlayVertex(v,uEntryPoint)$
+            \State $vOverlay=G.overlayVertex[v,  vEntryPoint]$
             \If{$vOverlay \notin overlayQ \textbf{ or } (arr f(\tau[u])+turnCost_{uv})<\tau[vOverlay]$}
                 \State $\tau[vOverlay]=\min\{\tau[vOverlay],(arr f(\tau[u])+turnCost_{uv})\}$  \Comment{perbarui label simpul $vOverlay$}
                 \State $p[vOverlay]=u$     \Comment{perbarui informasi \textit{predecessor} dari $vOverlay$}
@@ -638,7 +638,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
     \EndProcedure
 
 
-    \Procedure{tdRelaxOverlayCRP}{$u\rightarrow_{f_{shortcut\_uv}}v,u, \tau, p, Q,overlayQ$}
+    \Procedure{tdRelaxOverlayCRP}{$arc: Edge \  u\rightarrow_{f_{shortcut\_uv}}v,u, \tau, p, Q,overlayQ$}
         \If{$arr f_{shortcut\_uv}(\tau[u])\geq\tau[v] $}
             \State \textbf{return}
         \EndIf
@@ -648,17 +648,16 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
             \State $\tau[v]=\min\{\tau[v],arr f_{shortcut\_uv}(\tau[u])\}$  \Comment{perbarui label simpul $v$. $O(\mid f_u\mid +\mid f_{uv}\mid )$}
             \State $p[v]=u$     \Comment{perbarui informasi \textit{predecessor} dari $v$}
             \State $w=v.neighborOverlayVertex$
-            \State $vOverlay=GetOverlayVertex(v)$
-            \State $(vOutEdge,f_{vw})=vOverlay.GetOutEdge()$
+            \State $(vOutEdge,f_{vw})=v.outEdge$
             \State $l_{st}(w)=\min\{MSD(PV(s), PV(w)), MSD(PV(t), PV(w))\}$
             \If{$l_{st}(w)=0$} \Comment{sel dari $w$ pada level-1 sama dengan sel $s$ atau $t$ pada level 1}
                 \If{$w\notin Q \textbf{ or } arr f_{vw}(\tau[v])<\tau[w]$}
                     \State $\tau[w]=\min\{\tau[w],(arr f_{vw}(\tau[v])\}$  
                     \State $p[w]=v$     
                     \If{$w\notin Q$}
-                        \State $Q.insert(w,GetEntryPos(w),\tau[w])$
+                        \State $Q.insert(w,G.entryPos[arc,w],\tau[w])$
                     \Else
-                     \State   $Q.decreaseKey(w,GetEntryPos(w),\tau[w])$
+                     \State   $Q.decreaseKey(w,G.entryPos[arc,w],\tau[w])$
                     \EndIf
                 \EndIf
             \Else
