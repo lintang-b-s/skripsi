@@ -571,9 +571,6 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
         
         \If{$overlayQ =\emptyset \textbf{ or } Q.getMin() < overlayQ.getMin()$}
             \State $(u,uEntryPos)=Q.deleteMin()$
-            \If {$u\in Q \textbf{ and } dist[u]>shortestTimeTravel$}
-                \State \textbf{break}
-            \EndIf
             \If{$u=t$}
                 \State $shortestTimeTravel=\min\{shortestTimeTravel,dist[u]\}$
             \EndIf
@@ -582,9 +579,6 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
             \EndFor
         \Else 
             \State $u=overlayQ.deleteMin()$
-            \If {$u\in Q \textbf{ and } dist[u]>shortestTimeTravel$}
-                \State \textbf{break}
-            \EndIf
             \State $l_{st}(u)=\min\{MSD(PV(s), PV(u)), MSD(PV(t), PV(u))\}$
             \For{$(u\rightarrow_{f_{shortcut\_uv}}v) \in E_{\mathcal{C}^{l_{st}(u)}}$}
                 \State \Call{tdRelaxOverlayCRP}{$u\rightarrow_{f_{shortcut\_uv}}v,u, \tau, p, Q,overlayQ$}
