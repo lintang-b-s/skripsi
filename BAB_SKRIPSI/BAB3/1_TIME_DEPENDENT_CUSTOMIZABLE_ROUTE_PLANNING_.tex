@@ -254,7 +254,7 @@ Penulis melakukan beberapa optimasi untuk mempercepat algoritma kueri. Pada saat
              \State \Call{BDTurnAwareOverlayDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest$}
         \EndIf
     \EndWhile   
-    \State \textbf{return} $shortest, $ \Call{PATHUNPACKING}{$G,OG,fInfo,bInfo,PV(s),PV(t)$}
+    \State \textbf{return} $shortest, $ \Call{PATHUNPACKING}{$fInfo, bInfo$}
 \EndProcedure
 \end{algorithmic}
 \end{minipage}%
@@ -585,7 +585,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
             \EndFor
         \EndIf
     \EndWhile
-    \State \textbf{return} $shortestTimeTravel, $ \Call{pathUnpacking}{p}, $p, \tau$
+    \State \textbf{return} $shortestTimeTravel, $ \Call{pathUnpacking}{$p, \tau$}, $p, \tau$
 \EndProcedure
 \end{algorithmic}
 \end{minipage}%
