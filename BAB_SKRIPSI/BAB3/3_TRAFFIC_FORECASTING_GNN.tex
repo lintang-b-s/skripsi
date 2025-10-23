@@ -92,7 +92,7 @@ Penulis menambahkan \textit{Residual Connection Layer} yang meneruskan input dar
             \For {$i =1 \to m$}
                 \State $\text{hitung }  \hat{\mathcal{Y}} \gets f(\mathcal{X}[:,:,id(V_i),:], \Theta)$
                 \State $\text{hitung } L\gets MSE(\hat{\mathcal{Y}}[:,:r,:], \mathcal{Y}[:,:r,id(V_i)])$
-                \State $\text{update parameter } \Theta \text{ berdasarkan gradiennya dan \textit{learning rate }} \gamma$ 
+                \State $\text{update parameter } \Theta \text{ berdasarkan \textit{gradient} dari \textit{loss function} dan \textit{learning rate }} \gamma$ 
             \EndFor 
             \State $iter \gets iter+1$
             \EndWhile 
