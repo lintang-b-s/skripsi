@@ -552,7 +552,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
 
 
 \begin{algorithm}
-\caption{Time-Dependent Dijkstra CRP menghitung label final $\tau[u]=EA_G(s,u,\tau_0)$ untuk semua simpul $u$ yang dapat dijangkau (dan $\tau[u]=\infty $ jika $u$ tidak dapat dijangkau.} 
+\caption{Time-Dependent Dijkstra CRP menghitung label final $\tau[t]=EA_G(s,t,\tau_0)$ (dan $\tau[t]=\infty $ jika $t$ tidak dapat dijangkau).} 
 \label{alg:td-dijkstra-crp}
 \resizebox{\textwidth}{!}{%
 \begin{minipage}{\textwidth}
@@ -586,7 +586,7 @@ Algoritma kueri pada Time-Dependent Customizable Route Planning hampir sama deng
             \EndFor
         \EndIf
     \EndWhile
-     \State \textbf{return} $0, \emptyset, \emptyset, \emptyset  $
+     \State \textbf{return} $\tau[t], \emptyset, \emptyset, \emptyset  $
 \EndProcedure
 \end{algorithmic}
 \end{minipage}%
