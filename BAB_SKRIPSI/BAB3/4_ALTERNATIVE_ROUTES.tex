@@ -30,7 +30,7 @@ Agar metode \textit{admissible paths} bisa diintegrasikan dengan Time-Dependent 
     \State $X=\emptyset$
     \State $Q_s=\{(s_, sEntryPos, \tau_0)\}, \ Q_t=\{(t, tEntryPos,0)\}$
     \State $overlayQ_s=\emptyset, \ overlayQ_t=\emptyset $
-    \While{$(Q_S \neq \emptyset \textbf{ or } Q_t\neq \emptyset \textbf{ and } \min \{Q_s.min(), Q_t.min()\})\leq (1+\epsilon) B$}
+    \While{$(Q_S \neq \emptyset \textbf{ or } Q_t\neq \emptyset) \textbf{ and }  \min \{Q_s.min(), overlayQ_s.min()\} + \min \{Q_t.min(), overlayQ_t.min()\}\leq (1+\epsilon) B$}
         \State $minG = \min \{ Q_s, Q_t \}$
         \State $minOverlayG = \min \{ overlayQ_s, overlayQ_t \}$
         \If{$ minG < minOverlayG$}

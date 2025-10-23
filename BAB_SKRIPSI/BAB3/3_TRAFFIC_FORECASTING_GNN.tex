@@ -70,8 +70,37 @@ Temporal Convolution Layer mengekstrak  fitur temporal dari data \textit{time se
     \label{fig:tc-layer}
 \end{figure}
 
-Penulis menambahkan \textit{Residual Connection Layer} yang meneruskan input dari Temporal Convolution layer ke output dari Graph Convolution Layer  dan mnambahkan \textit{skip connections} yang meneruskan output dari setiap Temporal Convolution Layer ke output layer. Hal ini bertujuan untuk mencegah terjadinya \textit{vanishing gradient problem} pada saat \textit{training} model. Output layer tediri dari dua 1x1 \textit{convolution layer} yang memetakan input ke dimensi output $Q$. Dimana $Q$ adalah jumlah \textit{step} prediksi yang diinginkan. Arsitektur dari Multivariate Time-Series Graph Neural Network ditunjukkan pada Gambar~\ref{fig:mtgnn-architecture}
+Penulis menambahkan \textit{Residual Connection Layer} yang meneruskan input dari Temporal Convolution layer ke output dari Graph Convolution Layer  dan mnambahkan \textit{skip connections} yang meneruskan output dari setiap Temporal Convolution Layer ke output layer. Hal ini bertujuan untuk mencegah terjadinya \textit{vanishing gradient problem} pada saat \textit{training} model. Output layer tediri dari dua 1x1 \textit{convolution layer} yang memetakan input ke dimensi output $Q$. Dimana $Q$ adalah jumlah \textit{step} prediksi yang diinginkan. Arsitektur dari Multivariate Time-Series Graph Neural Network ditunjukkan pada Gambar~\ref{fig:mtgnn-architecture}. MTGNN menggunakan \textit{L2 loss function}/\textit{mean squared error}  untuk mengukur performa dari model. MTGNN dilatih dengan menggunakan \textit{curriculum learning}, dimana algoritma dimulai dengan memprediksi satu \textit{time step}. Seiring bertambahnya iterasi, panjang prediksi model meningkat secara bertahap.\textit{Pseudocode} untuk  \textit{curiculum learning} ditunjukkan pada Algoritma~\ref{alg:mtgnn-learning}.
 
+
+\begin{algorithm}
+\caption{Curiculum Learning dengan input \textit{dataset} $O$, model $f(\cdot)$, parameter model $\Theta$, \textit{learning rate} $\gamma$, \textit{batch size} $b$, \textit{step size} $s$, \textit{split size} $m$}
+\label{alg:mtgnn-learning}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{\textwidth}
+\scriptsize
+\begin{algorithmic}[1]
+\setstretch{0.9}
+    \Procedure{CuriculumLearning}{$O, f(\cdot), V, \Theta, \gamma,  b, s, m$}
+        \State $iter\gets 1, r \gets 1$
+        \While{$\textbf{until convergence}$}
+            \State $\text{sampel satu batch }  \mathcal{X}\in \mathbb{R}^{b\times T \times N \times D}, \mathcal{Y}^{b\times T' \times N} \text{ dari } O $
+            \State $\text{random split } V \text{ menjadi } m \text{ grup } \cup_{i=1}^{m}V_i=V$
+            \If {$iter \% s=0 \text{ and }  r\leq T'$}
+                \State $r \gets r+1$
+            \EndIf
+            \For {$i =1 \to m$}
+                \State $\text{hitung }  \hat{\mathcal{Y}} \gets f(\mathcal{X}[:,:,id(V_i),:], \Theta)$
+                \State $\text{hitung } L\gets MSE(\hat{\mathcal{Y}}[:,:r,:], \mathcal{Y}[:,:r,id(V_i)])$
+                \State $\text{update parameter } \Theta \text{ berdasarkan gradiennya dan \textit{learning rate }} \gamma$ 
+            \EndFor 
+            \State $iter \gets iter+1$
+            \EndWhile 
+    \EndProcedure
+\end{algorithmic}
+\end{minipage}%
+}
+\end{algorithm}
 
 \begin{figure}[H]
     \centering
