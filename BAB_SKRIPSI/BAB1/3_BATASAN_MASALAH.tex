@@ -1,8 +1,8 @@
 \begin{enumerate}
-    \item Pembuatan software traffic aware routing engine menggunakan Time-Depdendent Customizable Route Planning, rute alternative, dan online map-matching dengan Multiple Hypothesis Technique (MHT) dengan bahasa pemrograman Go dan Typescript.
-    \item Pembuatan model dari Graph Neural Network menggunakan library PyTorch.
+    \item Pembuatan \textit{software} \textit{traffic aware routing engine} dengan fitur \textit{time-dependendent route planning} dengan menggunakan teknik akselerasi Time-Dependent Customizable Route Planning, pencarian rute alternatif dengan metode heuristik Admissible Paths, dan \textit{online map-matching } dengan Multiple Hypothesis Technique (MHT) menggunakan bahasa pemrograman Go dan Typescript.
+    \item Pembuatan model dari Multivariate Time-Series Graph Neural Network menggunakan library PyTorch.
     \item Algoritma yang dibandingkan adalah time-independent Customizable Route Planning, Contraction Hierarchies, dan Time-dependent Customizable Route Planning.
-    \item Pengujian algoritma dilakukan pada beberapa query rute terpendek dan rute alternatif yang digenerate secara acak pada peta openstreetmap dengan batas wilayah area Dareah Istimewa Yogyakarta, Klaten, dan Surakarta. 
-    \item Dataset histori traffic speed diperoleh dengan melakukan simulasi traffic dengan software sumo dalam kurun waktu simulasi 30 hari.
-    \item Arsitektur Graph Neural Network yang digunakan adalah Dynamic Graph Convolutional Recurrent Network.
+    \item Pengujian algoritma dilakukan pada beberapa kueri rute terpendek dan rute alternatif yang digenerate secara acak pada peta openstreetmap dengan batas \textit{bounding box} koordinat geografis $(minLongitude,minLatitude,maxLongitude,maxLatitude)=(110.132,-8.2618,110.9221,-6.888)$ yang meliputi wilayah area Daerah Istimewa Yogyakarta, Klaten, Semarang, dan Surakarta. 
+    \item Dataset historis \textit{traffic speed} diperoleh dengan melakukan \textit{web scraping} data \textit{real time traffic} pada situs waze.com dalam kurun waktu 30 hari.
+    \item Arsitektur Graph Neural Network yang digunakan adalah Multivariate Time-Series Graph Neural Network.
 \end{enumerate}

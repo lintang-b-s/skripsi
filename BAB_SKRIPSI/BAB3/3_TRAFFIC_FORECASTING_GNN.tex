@@ -4,7 +4,7 @@ Diberikan sekuens data pengamatan lalu lintas sejumlah $M$ \textit{time steps} $
 
 \subsection{Arsitektur Multivariate Time-Series Graph Neural Network (MTGNN)}
 \label{subsec:traffic-forecasting-mtgnn-architecture}
-Arsitektur dari MTGNN terdiri dari, \textit{graph learning layer}, sejumlah $m$ \textit{graph convolution layer}, sejumlah $m$ \textit{temporal convolution layer}, dan sebuah \textit{output layer}. \textit{Graph learning layer} mempelajari matriks \textit{adjacency} graf secara adaptif untuk menangkap hubungan tersembunyi di antara data \textit{traffic time series} tanpa perlu menentukan struktur graf secara eksplisit (\cite{Wu2020}). \textit{Graph learning layer} didefinisikan dengan:
+Arsitektur dari MTGNN terdiri dari, \textit{graph learning layer}, sejumlah $m$ \textit{graph convolution layer}, sejumlah $m$ \textit{temporal convolution layer}, dan sebuah \textit{output layer} (\cite{Wu2020}). \textit{Graph learning layer} mempelajari matriks \textit{adjacency} graf secara adaptif untuk menangkap hubungan tersembunyi di antara data \textit{traffic time series} tanpa perlu menentukan struktur graf secara eksplisit (\cite{Wu2020}). \textit{Graph learning layer} didefinisikan dengan:
 
 \begin{align}
     \mathbf{M}_1 &= \tanh(\alpha \mathbf{E}_1 \mathbf{\Theta_1})\\
@@ -34,7 +34,7 @@ Persamaan (3.19)-(3.20) membuat matriks $adjacency$ graf menjadi \textit{sparse}
 \begin{figure}[H]
     \centering
     \includegraphics[]{figures/gc_layer.png}
-    \caption{Arsitektur dari Graph Convolution Layer}
+    \caption{Arsitektur dari Graph Convolution Layer (diadaptasi dari~\cite{Wu2020})}
     \label{fig:gc-layer}
 \end{figure}
 
@@ -43,7 +43,7 @@ Persamaan (3.19)-(3.20) membuat matriks $adjacency$ graf menjadi \textit{sparse}
 \begin{figure}[H]
     \centering
     \includegraphics[]{figures/mix_hop.png}
-    \caption{Arsitektur dari Mix-hop Propagation Layer}
+    \caption{Arsitektur dari Mix-hop Propagation Layer (diadaptasi dari~\cite{Wu2020})}
     \label{fig:mixhop-layer}
 \end{figure}
 
@@ -66,11 +66,11 @@ Temporal Convolution Layer mengekstrak  fitur temporal dari data \textit{time se
 \begin{figure}[H]
     \centering
     \includegraphics[]{figures/tc_layer.png}
-    \caption{Arsitektur dari Temporal Convolution Layer}
+    \caption{Arsitektur dari Temporal Convolution Layer (diadaptasi dari~\cite{Wu2020})}
     \label{fig:tc-layer}
 \end{figure}
 
-Penulis menambahkan \textit{Residual Connection Layer} yang meneruskan input dari Temporal Convolution layer ke output dari Graph Convolution Layer  dan mnambahkan \textit{skip connections} yang meneruskan output dari setiap Temporal Convolution Layer ke output layer. Hal ini bertujuan untuk mencegah terjadinya \textit{vanishing gradient problem} pada saat \textit{training} model. Output layer tediri dari dua 1x1 \textit{convolution layer} yang memetakan input ke dimensi output $Q$. Dimana $Q$ adalah jumlah \textit{step} prediksi yang diinginkan. Arsitektur dari Multivariate Time-Series Graph Neural Network ditunjukkan pada Gambar~\ref{fig:mtgnn-architecture}. MTGNN menggunakan \textit{L2 loss function}/\textit{mean squared error}  untuk mengukur performa dari model. MTGNN dilatih dengan menggunakan \textit{curriculum learning}, dimana algoritma dimulai dengan memprediksi satu \textit{time step}. Seiring bertambahnya iterasi, panjang prediksi model meningkat secara bertahap.\textit{Pseudocode} untuk  \textit{curiculum learning} ditunjukkan pada Algoritma~\ref{alg:mtgnn-learning}.
+\cite{Wu2020} menambahkan \textit{Residual Connection Layer} yang meneruskan input dari Temporal Convolution layer ke output dari Graph Convolution Layer  dan mnambahkan \textit{skip connections} yang meneruskan output dari setiap Temporal Convolution Layer ke output layer. Hal ini bertujuan untuk mencegah terjadinya \textit{vanishing gradient problem} pada saat \textit{training} model. Output layer tediri dari dua 1x1 \textit{convolution layer} yang memetakan input ke dimensi output $Q$. Dimana $Q$ adalah jumlah \textit{step} prediksi yang diinginkan. Arsitektur dari Multivariate Time-Series Graph Neural Network ditunjukkan pada Gambar~\ref{fig:mtgnn-architecture}. MTGNN menggunakan \textit{L2 loss function}/\textit{mean squared error}  untuk mengukur performa dari model. MTGNN dilatih dengan menggunakan \textit{curriculum learning}, dimana algoritma dimulai dengan memprediksi satu \textit{time step}. Seiring bertambahnya iterasi, panjang prediksi model meningkat secara bertahap. \textit{Pseudocode} untuk  \textit{curiculum learning} ditunjukkan pada Algoritma~\ref{alg:mtgnn-learning}.
 
 
 \begin{algorithm}
@@ -105,6 +105,6 @@ Penulis menambahkan \textit{Residual Connection Layer} yang meneruskan input dar
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/mtgnn.png}
-    \caption{Arsitektur dari Multivariate Time-Series Graph Neural Network}
+    \caption{Arsitektur dari Multivariate Time-Series Graph Neural Network (diadaptasi dari~\cite{Wu2020})}
     \label{fig:mtgnn-architecture}
 \end{figure}

@@ -5,7 +5,7 @@ Sekuens data dari sejumlah K data titik GPS yang dikumpulkan oleh kendaraan dide
     p(\tau)=\prod_{i=1}^{\infty}p(e_i\rightarrow e_{i+1})
 \end{equation}
 
-\textit{Online map-matching} dapat dilakukan dengan menggunakan \textit{Bayesian filtering} \cite{Taguchi2019}. \textit{Bayesian filtering} memberikan estimasi probabilitas posterior $p(r_k\mid g_{1:k})$ untuk setiap langkah pengambilan sampel $k$. Probabilitas posterior dapat dihitung melalui teorema bayes sebagai berikut:
+\textit{Online map-matching} dapat dilakukan dengan menggunakan \textit{Bayesian filtering} (\cite{Taguchi2019}). \textit{Bayesian filtering} memberikan estimasi probabilitas posterior $p(r_k\mid g_{1:k})$ untuk setiap langkah pengambilan sampel $k$. Probabilitas posterior dapat dihitung melalui teorema bayes sebagai berikut:
 \begin{equation}
     p(r_k\mid g_{1:k})=\frac{p(g_k\mid r_k,g_{1:k-1})p(r_k,g_{1:k-1})}{p(g_k\mid g_{1:k-1})}
 \end{equation}
@@ -48,7 +48,7 @@ Dimana $x'$ adalah titik proyeksi GPS $g_k$ pada segmen jalan $r_k$ dan $x'_r$ a
 
 \subsection{Algoritma}
 \label{subsec:omm-algoritma}
-Penulis menggunakan algoritma Multiple Hypothesis Technique (OMM-MHT) yang diusulkan oleh \cite{Taguchi2019} untuk menyelesaikan permasalahan \textit{online map-matching}. MHT mendefinisikan probabilitas posterior dengan:
+Penelitian oleh \cite{Taguchi2019} menyelesaikan permasalahan \textit{online map-matching} menggunakan Algoritma Multiple Hypothesis Technique (OMM-MHT). MHT mendefinisikan probabilitas posterior dengan:
 \begin{equation}
     p(r_k\mid g_{1:k})=\sum_{i=1}^{N_c}c_i.w\cdot \delta_{r_{k},c_i.e}
 \end{equation}
@@ -57,11 +57,16 @@ Dimana $N_C$ adalah jumlah kandidat segmen jalan, $c_i$ adalah kandidat ke-$i$ y
 Algoritma diawali dengan menginisialisasi himpunan kandidat segmen jalan $C$ yang jarak \textit{haversine} nya dengan titik GPS $g_1$ kurang dari jarak $L_C$ yang sudah ditentukan sebelumnya dan nilai bobot dari setiap kandidat ditetapkan berdasarkan panjang segmen jalan $c_i.e.l$. Probabilitas posterior dihitung saat algoritma menjalankan prosedur \textit{filtering}. \textit{Output} dari setiap \textit{time step} adalah kandidat dengan probabilitas tertinggi, yaitu $\arg \max c_i.w$.
 
 Probabilitas \textit{route prediction} $p(r_{k+1}\mid r_k)$ didefinisikan dengan:
-\begin{equation}
-p(r_{k+1}\mid r_k)=\sum_{n=1}^{\infty}\sum_{e_1}\ldots\sum_{e_n}\prod_{i=1}^{n-1}p(e_i\rightarrow e_{i+1})f(\tau_{1:n})\delta_{r_k+1,e_n}  
-\end{equation}
+\begin{align}
+p(r_{k+1}\mid r_k)&= \mathbb{E}_{p(\tau)}[p(r_{k+1} \mid r_k, \tau)] \notag \\
+&=\sum_{\tau}p(\tau) \ p(r_{k+1} \mid r_k, \tau)  \notag \\
+&=\sum_{\tau}p(\tau)\int p(x) \int p(v_k)\  p(r_{k+1}\mid r_k,\tau, x , v_k)dv_kdx \notag \\
+&=\sum_{\tau}p(\tau)\sum_{n=1}^{\infty}f(\tau_{1:n})\delta_{r_k+1,e_n}  \notag 
+\\&=\sum_{n=1}^{\infty}\sum_{e_1}\ldots\sum_{e_n}\prod_{i=1}^{n-1}p(e_i\rightarrow e_{i+1})f(\tau_{1:n})\delta_{r_k+1,e_n} 
+\label{eq:route-prediction}
+\end{align}
 
-Dimana $p(e_i\rightarrow e_{i+1})$ adalah probabilitas transisi sisi dari $e_i$ ke $e_j$ yang dimodelkan sebagai sebuah model Markov yang nilainya dapat diestimasi dari data historis. Probabilitas transisi sisi didefinisikan dengan:
+Persamaan~\ref{eq:route-prediction} berarti bahwa probabilitas \textit{route prediction} dapat dihitung sebagai \textit{expected value} dari probabilitas bersyarat bahwa kendaraan berjalan melalui setiap kemungkinan rute. Dimana $p(e_i\rightarrow e_{i+1})$ adalah probabilitas transisi sisi dari $e_i$ ke $e_j$ yang dimodelkan sebagai sebuah model Markov yang nilainya dapat diestimasi dari data historis. Probabilitas transisi sisi didefinisikan dengan:
 \begin{equation}
 p(e_i\rightarrow e_j)=\frac{N(e_i\rightarrow e_j) + 1}{\sum_{j}N(e_i\rightarrow e_j)+N_j}
 \end{equation}
@@ -88,13 +93,13 @@ $f(\tau_{1:n})$ didefinisikan dengan:
 \end{align}
 
 
-Dimana $ h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilitas kendaraan melaju lebih jauh melampaui segmen jalan $e_n$ pada \textit{time step } $k$. $p(v_k)$ adalah probabilitas estimasi kecepatan dari kendaraan yang menghasilkan data GPS yang diasumsikan mengikuti distribusi \textit{Gaussian}. Prediksi rute dapat diaproksimasi dengan menghitung perkalian dari probabilitas probabilitas kendaraan melaju lebih jauh dengan probabilitas transisi dari k kumpulan segmen-segmen jalan yang saling terhubung, hingga suatu titik dimana probabilitas tersebut lebih kecil dari probabilitas $L_p$ yang kita tentukan sendiri nilainya.  Algoritma OMM-MHT dijelaskan pada \textit{pseudocode} algoritma~\ref{alg:omm-mht}. Kompleksitas waktu dari algoritma adalah $O(b^{d_p})$, dimana $b$ adalah jumlah rata-rata tetangga dari segmen. $d_p$ adalah kedalaman aksimum dari \textit{prediction tree} (lihat gambar~\ref{fig:prediction-tree-omm}).
+Dimana $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilitas kendaraan melaju lebih jauh melampaui segmen jalan $e_n$ pada \textit{time step } $k$. $p(v_k)$ adalah probabilitas estimasi kecepatan dari kendaraan yang menghasilkan data GPS yang diasumsikan mengikuti distribusi \textit{Gaussian}. Prediksi rute dapat diaproksimasi dengan menghitung perkalian antara probabilitas probabilitas kendaraan melaju lebih jauh dari $e_n$ ($h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$), probabilitas rute $p(\tau)$ dari k kumpulan segmen-segmen jalan yang  dimulai dari kandidat dan saling terhubung, dan probabilitas \textit{posterior} pada \textit{time step} sebelumnya dari kandidat, hingga suatu titik dimana probabilitas tersebut lebih kecil dari probabilitas $L_p$ yang kita tentukan sendiri nilainya. Jika hasil perkalian probabilitas tersebut lebih besar dari $L_p$, maka algoritma akan melanjutkan proses secara rekursif untuk menghitung probabilitas untuk rute gabungan dengan kandidat segmen berikutnya yang terhubung dengan kandidat sebelumnya.  Algoritma OMM-MHT (\cite{Taguchi2019}) dijelaskan pada \textit{pseudocode} algoritma~\ref{alg:omm-mht}. $h_{pre}$ dan $h_{new}$ secara berturut-turut adalah $h(\tau_{1:n-1}, \overline{v}_k,\sigma_{v,k},\Delta t_k)$ dan $h(\tau_{1:n}, \overline{v}_k,\sigma_{v,k},\Delta t_k)$. Pada tahap prediksi, setiap kandidat menghasilkan kandidat-kandidat baru untuk semua \textit{states} yang dapat dilewati dan kandidat-kandidat yang mewakili \textit{state} yang sama diintegrasikan dengan menjumlahkan probabilitasnya. Sehingga, \textit{states} yang diwakili oleh banyak kandidat sangat mungkin untuk dipilih sebagai hasil prediksi \textit{map-matching} pada \textit{time step berikutnya}. Pada tahap \textit{filtering}, kandidat-kandidat yang memiliki probabilitas \textit{posterior} dibawah $L_u$ akan dihapus dari daftar kandidat. Kompleksitas waktu dari algoritma adalah $O(b^{d_p})$, dimana $b$ adalah jumlah rata-rata tetangga dari segmen. $d_p$ adalah kedalaman aksimum dari \textit{prediction tree} (lihat gambar~\ref{fig:prediction-tree-omm}).
 
 
 \begin{figure}[H]
     \centering
     \includegraphics[]{figures/prediction_tree_omm.png}
-    \caption{Contoh \textit{prediction} tree dari algoritma OMM-MHT.}
+    \caption{Contoh \textit{prediction} tree dari algoritma OMM-MHT (diadaptasi dari~\cite{Taguchi2019}).}
     \label{fig:prediction-tree-omm}
 \end{figure}
 
@@ -102,7 +107,7 @@ Dimana $ h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilit
 
 
 \begin{algorithm}
-\caption{Online Map-Matching dengan menggunakan Multi Hypothesis Technique} 
+\caption{Online Map-Matching dengan menggunakan Multi Hypothesis Technique (\cite{Taguchi2019})} 
 \label{alg:omm-mht}
 \resizebox{\textwidth}{!}{%
 \begin{minipage}{\textwidth}
@@ -120,16 +125,16 @@ Dimana $ h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilit
                     \State $\tau \gets \{c.e\}$
                     \State $p_\tau\gets 1$ \Comment{menghitung $p(\tau)$}
                     \State $h_{pre} \gets 1$
-                    \State $C_{new} \leftarrow$ \Call{Recur}{$C_{new},c.w,\tau,p_\tau,\overline{v},\sigma_v,\Delta t_{k-1}, h_{pre}$}
+                    \State $C_{new} \leftarrow$ \Call{Recur}{$C_{new},c.w,\tau,p_\tau,\overline{v},\sigma_v,\Delta t_{k-1}, h_{pre}$} \Comment{\textit{produce} \textit{candidates} baru yang dapat dilewati }
                 \EndFor
                 \State $C\leftarrow C_{new}$
                 \State $\overline{v},\sigma_v\leftarrow KalmanFilter(\overline{v},\sigma_v,g_k.v)$
             \EndIf
 
             \For{$\textbf{all }c\in C$} \Comment{filtering}
-                \State $c.w\leftarrow \frac{c.w.ObservationProb(g_k,c)}{\sum_{c'\in C}c'.w.ObservationProb(g_k,c')}$ \Comment{menghitung posterior $p(r_{k+1}\mid g_{1:k+1})$}
+                \State $c.w\leftarrow \frac{c.w\cdot ObservationProb(g_k,c)}{\sum_{c'\in C}c'.w\cdot ObservationProb(g_k,c')}$ \Comment{menghitung \textit{posterior probability} $p(r_{k}\mid g_{1:k})$ }
             \EndFor
-            \State $\{c\mid c\in C, c.w>L_u\}$
+            \State $\{c\mid c\in C, c.w>L_u\}$ \Comment{\textit{filter candidate} yang memiliki bobot $w> L_u$ }
             \State $r_k\leftarrow (\arg \max_{c\in C} c.w).e$
             \State \textbf{output } $r_k$
         \EndFor
@@ -146,10 +151,10 @@ Dimana $ h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilit
                 \State $C_{new}\gets Recur(C_{new},w,\tau',p_{\tau}',\overline{v},\sigma_v,\Delta t_{k-1}, h'_{pre})$
             \EndFor
         \EndIf 
-        \State $w' \gets w\cdot p_{\tau}\cdot (h_{pre}-h_{new})$ \Comment{menghitung $p(r_{k+1}\mid r_k)$}
+        \State $w' \gets w\cdot p_{\tau}\cdot (h_{pre}-h_{new})$ \Comment{menghitung  $p(r_{k}\mid r_{k-1})\ p(r_{k-1}\mid g_{{1:k-1}})$ }
         \State $c_{new}\gets C_{new}.Find(c_{new}\mid c_{new}.e=\tau .last)$
         \If{$c_{new}\neq null$}
-            \State $c_{new}.w=c_{new}.w+w'$
+            \State $c_{new}.w=c_{new}.w+w'$ \Comment{jumlahkan bobot dari \textit{states} yang diwakili > 1 kandidat yang sama untuk hitung \textit{prior}}
         \Else 
             \State $C_{new}\gets C_{new}\cup (\tau.last, w')$
         \EndIf
@@ -166,6 +171,3 @@ Dimana $ h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilit
 \end{minipage}%
 }
 \end{algorithm}
-
-
-
