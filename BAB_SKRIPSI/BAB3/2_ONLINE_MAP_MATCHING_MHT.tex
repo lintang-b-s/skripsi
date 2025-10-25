@@ -154,7 +154,7 @@ Dimana $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilita
         \State $w' \gets w\cdot p_{\tau}\cdot (h_{pre}-h_{new})$ \Comment{menghitung  $p(r_{k}\mid r_{k-1})\ p(r_{k-1}\mid g_{{1:k-1}})$ }
         \State $c_{new}\gets C_{new}.Find(c_{new}\mid c_{new}.e=\tau .last)$
         \If{$c_{new}\neq null$}
-            \State $c_{new}.w=c_{new}.w+w'$ \Comment{jumlahkan bobot dari \textit{states} yang diwakili > 1 kandidat yang sama untuk hitung \textit{prior}}
+            \State $c_{new}.w=c_{new}.w+w'$ \Comment{jumlahkan bobot dari \textit{states} yang sama yang diwakili > 1 kandidat untuk hitung \textit{prior}}
         \Else 
             \State $C_{new}\gets C_{new}\cup (\tau.last, w')$
         \EndIf
