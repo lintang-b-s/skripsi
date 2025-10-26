@@ -6,10 +6,18 @@ Untuk mencari rute alternatif, \cite{Abraham2010} memperkenalkan metode heuristi
 \end{enumerate}
 
 Agar metode \textit{admissible paths} bisa diintegrasikan dengan Time-Dependent Customizable Route Planning (TD-CRP), diperlukan sedikit modifikasi pada algoritma kueri. Karena metode \textit{admissible paths} menentukan kandidat rute-rute alternatif dari himpunan rute $s-v-t$, dimana $v$ adalah simpul yang dikunjungi oleh \textit{forward search} dan \textit{backward search}, kueri TD-CRP perlu dibuat \textit{bidirectional}. \textit{Upper} dan \textit{lower bound} dari \textit{minimum travel time } dari simpul $s$ ke $t$ didefinisikan dengan:
+
 \begin{align}
-    Max_{G}(s,t)=\min \{ \sum_{i=1}^{k-1} \max f_i \mid (v_1 \rightarrow_{f_1} \ldots \rightarrow_{f_{k-1}} v_k ) \text{ adalah rute dari simpul } s \text{ ke simpul } t \} \\ 
-    Min_{G}(s,t)=\min \{ \sum_{i=1}^{k-1} \min f_i \mid (v_1 \rightarrow_{f_1} \ldots \rightarrow_{f_{k-1}} v_k ) \text{ adalah rute dari simpul } s \text{ ke simpul } t \} \\
-    Min_{G}(s,t)\leq TTP_G(s,t)(\tau)\leq Max_G(s,t) \text{ untuk semua } \tau\in \mathbb{R}
+    Max_{G}(s,t)&=\min \{ \sum_{i=1}^{k-1} \max f_i  \mid  \begin{aligned}[t] 
+    &(v_1 \rightarrow_{f_1} \ldots \rightarrow_{f_{k-1}} v_k ) \\
+    & \text{ adalah rute dari simpul } s \text{ ke simpul } t \} 
+       \end{aligned}
+    \\ 
+    Min_{G}(s,t)&=\min \{ \sum_{i=1}^{k-1} \min f_i \mid \begin{aligned}[t]  
+    &(v_1 \rightarrow_{f_1} \ldots \rightarrow_{f_{k-1}} v_k ) \\
+    &\text{ adalah rute dari simpul } s \text{ ke simpul } t \} 
+     \end{aligned} \\
+    Min_{G}(s,t)&\leq TTP_G(s,t)(\tau)\leq Max_G(s,t) \text{ untuk semua } \tau\in \mathbb{R}
 \end{align}
 
 

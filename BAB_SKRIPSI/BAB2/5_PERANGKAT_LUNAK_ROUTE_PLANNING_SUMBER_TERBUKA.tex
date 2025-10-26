@@ -1,2 +1,196 @@
 Berbagai algoritma pencarian rute terpendek dan teknik akselerasi yang telah dijelaskan banyak digunakan pada perangkat lunak perencanaan rute (route planning) sumber terbuka berbasis OpenStreetMap (OSM). Berbagai perangkat lunak ini menggunakan data jaringan jalan OSM untuk menyediakan layanan navigasi serta pencarian rute secara efisien. Beberapa contoh perangkat lunak perencanaan rute sumber terbuka yang populer antara lain GraphHopper, OSRM (Open Source Routing Machine), dan Valhalla. Graphopper (\cite{Graphopper}) menggunakan algoritma Contraction Hierarchies untuk pencarian rute terpendek . Perangkat lunak OSRM (\cite{Luxen2011}) menggunakan algoritma Time-Independent Customizable Route Planning untuk pencarian rute terpendek. Valhalla (\cite{Valhalla}) menggunakan algoritma $A*$ dengan menggunakan teknik akselerasi yang mirip dengan Customizable Route Planning, yaitu dengan menambahkan sisi jalan pintas pada subgraf yang terdiri dari jalan raya dan jalan arteri. Ketiga perangkat lunak diatas menggunakan metode Hidden Markov Model (\cite{Newson2009}) untuk penyelesaian masalah \textit{offline map matching}. Meskipun ketiga perangkat lunak diatas telah banyak digunakan dan mendukung fitur pencarian rute terpendek secara efisien, ketiganya belum mendukung fitur \textit{time-dependent route planning}, \textit{online map-matching}, dan prediksi kecepatan lalu lintas. Oleh karena itu, diperlukan pembuatan sebuah perangkat lunak mengintegrasikan tiga fitur tersebut, guna menghasilkan layanan navigasi yang lebih adaptif, efisien, dan akurat.
 
+
+\begin{table}[h]
+\setlength{\tabcolsep}{6pt}
+\caption{Perbandingan performa berbagai algoritma perutean dalam hal prapemrosesan dan kinerja kueri.}
+\label{tab2:route_planning_algorithm_performance}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l c c c c c c}
+\hline
+ &  & \multicolumn{2}{c}{\textbf{Struktur Data}}  & \textbf{Kustomisasi} & \multicolumn{2}{c}{\textbf{KUERI}} \\
+\cline{3-5}
+\textbf{algoritma}  & & \textbf{ruang [GiB]} & \textbf{waktu [h:m]} & waktu [s] & \textbf{simpul terpindai} & \textbf{waktu [\(\mu\)s]} \\
+\hline
+Dijkstra     & & 0.4   & --   & -- & 9\,326\,696 & 2\,195\,080 \\
+CRP          & & 0.9   & 1:00 & 1.04s  & 2\,766      & 1\,650 \\
+Arc Flags    & &  0.6   & 2:46 & -- & 2\,646      & 408 \\
+CH          & &  0.4   & 0:05 & -- & 280        & 110 \\
+HPML         & &  1.8   & 0:50 & -- & --         & 2.55 \\
+TNR         & &  2.5   & 0:22 & -- & --         & 2.09 \\
+HL         & &  18.8  & 3:07 & -- & --         & 0.56 \\
+\hline
+\end{tabular}
+} % end resizebox
+\end{table}
+
+
+\begin{table}[h]
+\centering
+\setlength{\tabcolsep}{6pt}
+\caption{Perbandingan performa berbagai algoritma map-matching.}
+\label{tab2:map_matching_performance}
+\begin{tabular}{l l c }
+\hline
+\textbf{algoritma} & \textbf{dataset} & \textbf{akurasi} \\
+\hline
+Offline-HMM  & Seattle & 98\%   \\
+FastViterbi-HMM & Seattle & 98.9\% \\
+OHMM & Singapore & 92.1\% \\
+OLMM & Seattle & 98.57\% \\
+HMM+RCM & Singapore & 91.3\% \\
+IMM & Singapore & 92\% \\
+AMM & Singapore & 98.92\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\newpage
+
+\begin{longtable}{|p{3.75cm}|p{3.15cm}|l|l|}
+\caption{Perbandingan metode prediksi kecepatan lalu lintas.}  
+\label{tab2:traffic_speed_forecasting} \\
+\hline
+\textbf{Penulis} & \textbf{Dataset} & \textbf{Metode} & \textbf{Hasil} \\ 
+\hline
+
+\multirow{2}{*}{\cite{Wang2016}}
+& \multirow{2}{*}{\shortstack{Beijing GPS \\ \textit{Trajectory}\\(horison 50 menit)}}
+& ARIMA & \shortstack{ MAE: 10.0,\\ RMSE: 12.5} \\
+\cline{3-4} 
+ &  & SVR &  \shortstack{MAE: 10.1,\\ RMSE: 15.1} \\ 
+ \cline{3-4} 
+ &  & SAE & \shortstack{ MAE: 7.6,\\ RMSE: 10.0} \\ 
+ \cline{3-4} 
+ &  & 1D-CNN &  \shortstack{MAE:7.7,\\ RMSE: 10.0} \\
+ \cline{3-4} 
+ &  & CNN & \shortstack{ MAE: 7.0,\\ RMSE: 8.0} \\ 
+ \cline{3-4} 
+ &  & eRCNN &  \shortstack{MAE: 6.9,\\ RMSE: 7.8 } \\ 
+\cline{3-4} 
+\hline
+
+\multirow{2}{*}{\cite{Zhongjian2018}}
+& \multirow{2}{*}{\shortstack{Beijing GPS \\ \textit{Trajectory} \\(horison 10 menit)}} 
+& ARIMA &   RMSE: 10.245 \\
+\cline{3-4} 
+ &  & H-ARIMA &  RMSE: 11.867 \\ 
+ \cline{3-4} 
+ &  & SAE & RMSE: 8.471 \\ 
+ \cline{3-4} 
+ &  & LSTM & RMSE: 5.958 \\
+ \cline{3-4} 
+ &  & DCNN & RMSE: 6.085 \\ 
+ \cline{3-4} 
+ &  & GC & RMSE: 5.514 \\ 
+\cline{3-4} 
+ &  & ST-ResNet & RMSE: 5.749 \\ 
+\cline{3-4} 
+ &  & LC-RNN & RMSE: 5.274 \\ 
+\cline{3-4} 
+\hline
+
+\multirow{2}{*}{\cite{Yu2018}}
+& \multirow{2}{*}{\shortstack{PeMSD7(L)\\(horison 45 menit)}}
+& HA &  \shortstack{MAE: 4.60,\\ RMSE: 8.05} \\
+\cline{3-4} 
+ &  & LSVR &  \shortstack{MAE: 4.79,\\ RMSE: 8.72} \\
+\cline{3-4} 
+ &  & ARIMA &   \shortstack{MAE: 6.30,\\ RMSE: 9.39} \\
+\cline{3-4} 
+ &  & FNN &   \shortstack{MAE: 4.78,\\ RMSE: 8.46} \\ 
+ \cline{3-4} 
+ &  & FC-LSTM &  \shortstack{MAE: 4.66,\\ RMSE: 8.20}  \\ 
+ \cline{3-4} 
+ &  & GCGRU &  \shortstack{MAE: 4.12,\\ RMSE: 7.49} \\
+ \cline{3-4} 
+ &  & STGCN(Cheb) &  \shortstack{MAE: 3.97,\\ RMSE: 7.45} \\ 
+ \cline{3-4} 
+ &  & $STGCN(1^{st})$ &  \shortstack{MAE: 4.01,\\ RMSE: 7.81} \\ 
+\cline{3-4}
+\hline
+
+\pagebreak
+\multirow{2}{*}{\cite{Wu2019}}
+& \multirow{2}{*}{\shortstack{PeMS-BAY\\(horison 60 menit)}}
+& ARIMA &  \shortstack{MAE: 3.38,\\ RMSE: 6.50} \\
+\cline{3-4} 
+ &  & FC-LSTM &  \shortstack{MAE: 2.37,\\ RMSE: 4.96} \\
+\cline{3-4} 
+ &  & WaveNet &  \shortstack{ MAE: 2.35,\\ RMSE: 5.43} \\
+\cline{3-4} 
+ &  & DCRNN &   \shortstack{MAE: 2.07,\\ RMSE: 4.74} \\ 
+ \cline{3-4} 
+ &  & STGCN &  \shortstack{MAE: 2.49,\\ RMSE: 5.69} \\ 
+ \cline{3-4} 
+ &  & Graph Wavenet &  \shortstack{MAE: 1.95,\\ RMSE: 4.52} \\
+ \cline{3-4} 
+\hline
+
+
+\multirow{2}{*}{\cite{Pan2019}}
+& \multirow{2}{*}{\shortstack{METR-LA\\(horison 60 menit)}}
+& HA &  \shortstack{MAE: 26.2,\\ RMSE: 56.5} \\
+\cline{3-4} 
+ &  & ARIMA &  \shortstack{MAE: 27.1,\\ RMSE: 58.3} \\
+\cline{3-4} 
+ &  & GBRT &   \shortstack{MAE: 22.3,\\ RMSE: 47.7} \\
+\cline{3-4} 
+ &  & Seq2Seq &   \shortstack{MAE: 17.8,\\ RMSE: 35.1} \\ 
+ \cline{3-4} 
+ &  & GAT-SeqSeq &  \shortstack{MAE: 16.3,\\ RMSE: 31.9}  \\ 
+ \cline{3-4} 
+  &  & ST-ResNet &  \shortstack{MAE: 16.8,\\ RMSE: 31.9}  \\ 
+ \cline{3-4} 
+ &  & ST-MetaNet &  \shortstack{MAE: 15.0,\\ RMSE: 29.9} \\
+ \cline{3-4} 
+\hline
+
+
+\multirow{2}{*}{\cite{Guo2019}}
+& \multirow{2}{*}{\shortstack{PeMSD8\\(horison 60 menit)}}
+& HA &  \shortstack{MAE: 29.52,\\ RMSE: 44.03} \\
+\cline{3-4} 
+ &  & ARIMA &  \shortstack{MAE: 24.04,\\ RMSE: 43.30} \\
+\cline{3-4} 
+ &  & VAR &   \shortstack{MAE: 21.41,\\ RMSE: 31.21} \\
+\cline{3-4} 
+ &  & LSTM &   \shortstack{MAE: 23.18,\\ RMSE: 36.96} \\ 
+ \cline{3-4} 
+ &  & GRU &  \shortstack{MAE: 22.20,\\ RMSE: 35.95}  \\ 
+ \cline{3-4} 
+  &  & STGCN &  \shortstack{MAE: 18.88,\\ RMSE: 27.87}  \\ 
+ \cline{3-4} 
+ &  & GLU-STGCN &  \shortstack{MAE: 20.99,\\ RMSE: 30.78} \\
+ \cline{3-4} 
+&  & GeoMAN &  \shortstack{MAE: 17.84,\\ RMSE: 28.91} \\
+ \cline{3-4} 
+&  & ASTGCN &  \shortstack{MAE: 16.63,\\ RMSE: 25.27} \\
+ \cline{3-4} 
+\hline
+
+\pagebreak
+\multirow{2}{*}{\cite{Bai2020}}
+& \multirow{2}{*}{\shortstack{PeMSD8\\(horison 60 menit)}}
+& HA &  \shortstack{MAE: 34.86,\\ RMSE: 52.04} \\
+\cline{3-4} 
+ &  & VAR &  \shortstack{MAE: 19.19,\\ RMSE: 29.81} \\
+\cline{3-4} 
+ &  & GRU-ED &   \shortstack{MAE: 22.00,\\ RMSE: 36.23} \\
+\cline{3-4} 
+ &  & DSANet &   \shortstack{MAE: 17.14,\\ RMSE: 26.96} \\ 
+ \cline{3-4} 
+ &  & DCRNN &  \shortstack{MAE: 16.82,\\ RMSE: 26.36}  \\ 
+ \cline{3-4} 
+  &  & STGCN &  \shortstack{MAE: 17.50,\\ RMSE: 27.09}  \\ 
+ \cline{3-4} 
+ &  & ASTGCN &  \shortstack{MAE: 18.25,\\ RMSE: 28.06} \\
+ \cline{3-4} 
+&  & STSGCN &  \shortstack{MAE: 17.13,\\ RMSE: 26.86} \\
+ \cline{3-4} 
+&  & AGCRN &  \shortstack{MAE: 15.95,\\ RMSE: 25.22} \\
+ \cline{3-4} 
+\hline
+
+\end{longtable}
+

@@ -71,7 +71,7 @@ Persamaan~\ref{eq:route-prediction} berarti bahwa probabilitas \textit{route pre
 p(e_i\rightarrow e_j)=\frac{N(e_i\rightarrow e_j) + 1}{\sum_{j}N(e_i\rightarrow e_j)+N_j}
 \end{equation}
 
-dimana $N(e_i\rightarrow e_j)$ adalah jumlah transisi dari $e_i$ ke $e_j$ pada data historis dan $N_j$ adalah jumlah segmen jala terhubung dengan $e_i$.
+dimana $N(e_i\rightarrow e_j)$ adalah jumlah transisi dari $e_i$ ke $e_j$ pada data historis dan $N_j$ adalah jumlah segmen jalan terhubung dengan $e_i$.
 
 
 $f(\tau_{1:n})$ didefinisikan dengan:
@@ -88,8 +88,9 @@ $f(\tau_{1:n})$ didefinisikan dengan:
         &\frac{1}{e_1.l}\int_0^{e_1.l}\int_{\frac{\tau_{1:n}.l - x}{\Delta t_k}}^{\infty} p(v_k)\,dv_k\,dx \\
         &\approx \frac{1}{e_1.l} \int_0^{e_1.l} 
         \left. \frac{1}{1+\exp \left(-\frac{\pi(v_k-\overline{v}_k)}{\sqrt{3}\sigma_{v,k}} \right)}\right|_{v_k=\frac{\tau_{1:n}.l - x}{\Delta t_k}}^{\infty} dx \\
-        &= \left. \frac{1}{e_1.l} \left(\frac{\sqrt{3}\sigma_{v,k}\Delta t_k}{\pi} \log \left( \exp\left( \frac{\overline{v}_k\Delta t_k-(\tau_{1:n}.l - x)}{\sqrt{3}\sigma_{v,k}\Delta t_k/\pi} \right)+1 \right) \right) \right|_{x=0}^{e_1.l}
-    \end{aligned}
+        &= \left. \frac{1}{e_1.l} \left( s \log \left( \exp\left( \frac{\overline{v}_k\Delta t_k-(\tau_{1:n}.l - x)}{\sqrt{3}\sigma_{v,k}\Delta t_k/\pi} \right)+1 \right) \right) \right|_{x=0}^{e_1.l}  
+    \end{aligned} \\
+    s=\frac{\sqrt{3}\sigma_{v,k}\Delta t_k}{\pi} \notag \\
 \end{align}
 
 

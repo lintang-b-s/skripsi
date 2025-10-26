@@ -95,7 +95,7 @@ membuat \textit{hash table} yang memetakan posisi \textit{entry}/\textit{exit} k
 
 \subsection{Fase Kustomisasi yang Tidak Bergantung pada Waktu}
 \label{subsec:tdcrp-kustomisasi}
-Pada fase kustomisasi, \cite{Delling2015} membuat sisi-sisi jalan pintas yang menghubungkan antara simpul \textit{entry} dan simpul \textit{exit} dari setiap sel dengan menggunakan bobot sisi yang terbaru. \cite{Delling2015} juga membangun \textit{array} bobot sisi-sisi jalan pintas W. Untuk membuat sisi-sisi jalan pintas, dijalankan algoritma Dijkstra secara \textit{bottom-up}. Untuk setiap sel $C$ dari graf \textit{overlay} level 1, algoritma \textit{turn-aware} Dijkstra diterapkan pada setiap simpul \textit{entry} dari sel $C$ ke semua simpul \textit{exit} dari sel $C$. Untuk setiap sel $C$ dari graf level i (untuk i > 1), algoritma \textit{turn-aware} Dijkstra diterapkan pada setiap simpul \textit{entry} ke semua simpul \textit{exit} dari sel $C$. Untuk level i > 1, algoritma Dijkstra dijalankan pada subgraf dari $H_{i-1}$ menggunakan sisi-sisi jalan pintas dari subsel-subsel dari sel $C$ yang mana cenderung lebih cepat jika dibandingkan dengan kustomisasi pada level 1. Untuk mengakselerasi fase kustomisasi, \cite{Delling2015} menjalankan kustomisasi dari setiap sel secara \textit{multithreaded} dan menjalankan algoritma Dijkstra dari setiap simpul \textit{entry} secara \textit{multithreaded}. Gambar~\ref{fig:clique-crp} menunjukkan ilustrasi dari hasil kustomisasi. \textit{Pseudocode} untuk algoritma kustomisasi pada level 1 ditunjukkan pada Algoritma~\ref{alg:crp-customization-level1} dan Algoritma~\ref{alg:crp-customization-levelhigher} untuk level $l>1$. Misalkan $K$ adalah jumlah partisi pada graf \textit{overlay} level 1 dan diasumsikan setiap partisi memiliki jumlah simpul yang sama ($|C_1|=|C_2|=\ldots =|C_K|$), maka kompleksitas dari algoritma kustomisasi adalah $O(|E|+|V|\log \frac{|V|}{K})$.
+Pada fase kustomisasi, \cite{Delling2015} membuat sisi-sisi jalan pintas yang menghubungkan antara simpul \textit{entry} dan simpul \textit{exit} dari setiap sel dengan menggunakan bobot sisi yang terbaru. \cite{Delling2015} juga membangun \textit{array} bobot sisi-sisi jalan pintas W. Untuk membuat sisi-sisi jalan pintas, dijalankan algoritma Dijkstra secara \textit{bottom-up}. Untuk setiap sel $C$ dari graf \textit{overlay} level 1, algoritma \textit{turn-aware} Dijkstra diterapkan pada setiap simpul \textit{entry} dari sel $C$ ke semua simpul \textit{exit} dari sel $C$. Untuk setiap sel $C$ dari graf level i (untuk i > 1), algoritma \textit{turn-aware} Dijkstra diterapkan pada setiap simpul \textit{entry} ke semua simpul \textit{exit} dari sel $C$. Untuk level i > 1, algoritma Dijkstra dijalankan pada subgraf dari $H_{i-1}$ menggunakan sisi-sisi jalan pintas dari subsel-subsel dari sel $C$ yang mana cenderung lebih cepat jika dibandingkan dengan kustomisasi pada level 1. Untuk mengakselerasi fase kustomisasi, \cite{Delling2015} menjalankan kustomisasi dari setiap sel secara \textit{multithreaded} dan menjalankan algoritma Dijkstra dari setiap simpul \textit{entry} secara \textit{multithreaded}. Gambar~\ref{fig:clique-crp} menunjukkan ilustrasi dari hasil kustomisasi. \textit{Pseudocode} untuk algoritma kustomisasi pada level 1 ditunjukkan pada Algoritma~\ref{alg:crp-customization-level1} dan Algoritma~\ref{alg:crp-customization-levelhigher} untuk level $l>1$. Misalkan $K$ adalah jumlah partisi pada graf \textit{overlay} level 1. Kasus terburuk algoritma kustomisasi adalah ketika setiap partisi memiliki jumlah simpul yang sama ($|C_1|=|C_2|=\ldots =|C_K|$), maka kompleksitas dari algoritma kustomisasi adalah $O(|E|+|V|\log \frac{|V|}{K})$.
 
 \begin{figure}[H]
     \centering
@@ -290,7 +290,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
                 \State $newTT \gets fInfo[uEntryPos].tt + oArc.weight + turn.cost$
                 \State \Call{RELAX}{$v,u,uEntryPos, oArc, false, newTT,fInfo,bInfo, fQ,bQ, G, shortest$}
             \Else 
-                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,oArc,false, shortest, G, newTT, l_{st}(v), fInfo, bInfo, foQ, boQ$}
+                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,oArc,false, shortest, G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ, boQ$}
             \EndIf 
         \EndFor 
     \Else 
@@ -301,7 +301,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
                 \State $newTT\gets bInfo[uExitPos].tt + iArc.cost +turn.cost$
                 \State \Call{RELAX}{$v,u,uExitPos,iArc,true,newTT,fInfo,bInfo,fQ,bQ, G, shortest$}
             \Else
-                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,iArc, true, shortest, G, newTT, l_{st}(v), fInfo,bInfo, foQ,boQ$}
+                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,iArc, true, shortest, G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ,boQ$}
             \EndIf
         \EndFor 
         
@@ -369,7 +369,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.9}
-\Procedure{RELAXOVERLAY}{$v,u,uEntryExitPos,arc,backward,shortest,G, newTT, l_{st}(v), fInfo,bInfo, foQ,boQ$}
+\Procedure{RELAXOVERLAY}{$v,u,uEntryExitPos,arc,backward,shortest,G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ,boQ$}
     \If {$backward = false$}
         \State $vOverlay \gets G.overlayVertex[v, arc.entryPos, backward]$
         \State $((\cdot), vOverlayVisited) \gets fInfo[vOverlay]$
@@ -427,7 +427,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
                 \State $l_{st}(w) \gets \min \{ MSD(PV(s), PV(w)), MSD(PV(t), PV(w)) \}$
                 \State $vOutArc \gets v.outArc$
                 \If {$l_{st}(w)= 0$}
-                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vOutArc, false, newTT,fInfo,bInfo, fQ,bQ, G, shortest$}
+                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vOutArc, false, newTT,fInfo,bInfo, fQ,\newline bQ, G, shortest$}
                 \Else 
                     \State \parbox[t]{\dimexpr\linewidth-\algorithmicindent}{%
                   \Call{RELAXOVERLAY}{$w.originalId,v,v.originalId,vOutArc,false, shortest, G, newTT,$\\
@@ -450,7 +450,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
                 \State $l_{st}(w) \gets \min \{ MSD(PV(s), PV(w)), MSD(PV(t), PV(w)) \}$
                 \State $vInArc \gets v.inArc$
                 \If {$l_{st}(w)= 0$}
-                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vInArc, true, newTT,fInfo,bInfo, fQ,bQ, G, shortest$}
+                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vInArc, true, newTT,fInfo,bInfo, fQ,\newline bQ, G, shortest$}
                 \Else 
                     \State \parbox[t]{\dimexpr\linewidth-\algorithmicindent}{%
                   \Call{RELAXOVERLAY}{$w.originalId,v,v.originalId,vInArc,true, shortest, G, newTT,$\\
