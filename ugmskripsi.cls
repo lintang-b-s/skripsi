@@ -28,7 +28,7 @@
 \DeclareOption{inggris}{\@langindofalse\@langengtrue}
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{report}}
-\ExecuteOptions{skripsi,satusetengahspasi,indonesia}
+\ExecuteOptions{proposal,satusetengahspasi,indonesia}
 \ProcessOptions
 \LoadClass[a4paper,12pt]{report}
 \RequirePackage{natbib}
