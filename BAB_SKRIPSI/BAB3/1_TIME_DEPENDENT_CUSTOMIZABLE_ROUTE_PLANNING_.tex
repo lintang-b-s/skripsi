@@ -4,7 +4,7 @@ Diberikan sebuah graf $G=(V,E)$, dengan setiap sisi $(v,w)\in E$ memiliki fungsi
 
 Sebuah partisi dari simpul-simpul $V$ adalah sebuah himpunan sel-sel $\mathcal{C}=\{C_0,\ldots, C_k\}, C_i\subseteq V$ dengan setiap simpul $v\in V$ terkandung didalam satu sel $C_i$. Misalkan $U$ adalah jumlah simpul dari sel terbesar. Partisi \textit{multilevel} dari $V$ adalah himpunan partisi $\{\mathcal{C}^{0},\ldots, \mathcal{C}^{L}\}$, dimana $l$ adalah \textit{level} dari partisi $\mathcal{C}^{l}$ dan $U_{l}$ merepresentasikan ukuran dari sel terbesar pada level $l$. $L$ adalah jumlah level dari partisi \textit{multilevel}. $U_{0}=1$ atau dengan kata lain $U_{0}$ adalah $singleton$. $\mathcal{C}^{L+1}=V$ menandakan partisi pada level $L+1$ adalah graf orisinil. Untuk setiap level $l\leq L$ dan untuk setiap sel $C_{i}^{l}\in\mathcal{C}^l$, terdapat sebuah sel $C_{j}^{l+1}\in\mathcal{C}^{l+1} \text{ disebut sebagai \textit{supercell} dari } C_i^l$ dengan $C_i^l\subseteq C_j^{l+1}$. $c_l(v)$ adalah sel yang berisi simpul $v$ pada level $l$. Pada setiap level $l$ terdapat sisi batas dengan $endpoints$ terdapat pada sel yang berbeda pada level-$l$. Simpul batas pada level $l$ adalah simpul dengan setidaknya memiliki satu tetangga yang berada pada sel lain pada level $l$. Untuk partisi \textit{multilevel}, simpul batas pada level $l$ juga merupakan simpul batas pada level dibawah $l$.
 
-Dalam Time Dependent Customizable Route Planning, setiap sisi $a$ memiliki bobot berupa \textit{travel-time function} (TTF) $f_a:\Pi\rightarrow \mathbb{R}^{+}$, memetakan waktu keberangkatan ke waktu tempuh. Semua \textit{travel-time function} adalah \textit{continuous piecewiese linear function} dengan periode $\pi$ dan memiliki rentang nilai $\Pi=[0,\pi]$. Diberikan sebuah fungsi $f$, jumlah \textit{breakpoints} dari $f$ adalah $|f| $. Nilai maksimum dari $f$ didefinisikan dengan $f^{max}=\max_{\tau\in\Pi}f(\tau)$ dan nilai minimum dari $f$ didefinisikan dengan $f^{min}=\min_{\tau\in\Pi}f(\tau)$. \textit{Travel-time function} memenuhi sifat \textit{FIFO}, yaitu untuk bilangan riil positif sembarang $\sigma\leq\tau\in\Pi$, kondisi $\sigma+f(\sigma)\leq \tau+f(\tau)$ harus berlaku. Operasi \textit{link} didefinisikan dengan $link(f,g)=f+g \ \circ \ (identity+f)$, Fungsi \textit{link} juga bisa didefinisikan dengan $link(f,g)=g \star f: \tau \rightarrow g(f(\tau)+\tau) + f(\tau)$. Operasi \textit{merge} didefinisikan dengan $merge(f,g)=min(f,g):\tau \rightarrow \min \{g(\tau), f(\tau) \}$. Kedua operasi tersebut memiliki kompleksitas waktu $O(\mid f\mid +\mid g\mid )$. Diberikan rute $P=[v_1,\ldots,v_k]$, \textit{travel-time profile} (TTP) didefinisikan dengan $f_P:\Pi\rightarrow \mathbb{R}^{+}$, yang memetakan waktu keberangkatan $\tau$ (pada $v_1$) ke \textit{travel time} pada $P$ untuk menuju ke $v_k$. \textit{Arrival time function} $arr f:\tau\rightarrow f(\tau)+\tau$, memetakan waktu keberangkatan $\tau$ ke waktu kedatangan setelah melintasi sisi yang memiliki TTF $f$. 
+Dalam Time Dependent Customizable Route Planning, setiap sisi $a$ memiliki bobot berupa \textit{travel-time function} (TTF) $f_a:\Pi\rightarrow \mathbb{R}^{+}$, memetakan waktu keberangkatan ke waktu tempuh. Semua \textit{travel-time function} adalah \textit{continuous piecewiese linear function} dengan periode $\pi$ dan memiliki rentang nilai $\Pi=[0,\pi]$. Diberikan sebuah fungsi $f$, jumlah \textit{breakpoints} dari $f$ adalah $|f| $. Nilai maksimum dari $f$ didefinisikan dengan $f^{max}=\max_{\tau\in\Pi}f(\tau)$ dan nilai minimum dari $f$ didefinisikan dengan $f^{min}=\min_{\tau\in\Pi}f(\tau)$. \textit{Travel-time function} memenuhi sifat \textit{FIFO}, yaitu untuk bilangan riil positif sembarang $\sigma\leq\tau\in\Pi$, kondisi $\sigma+f(\sigma)\leq \tau+f(\tau)$ harus berlaku. Operasi \textit{link} didefinisikan dengan $link(f,g)=f+g \ \circ \ (identity+f)$, Fungsi \textit{link} juga bisa didefinisikan dengan $link(f,g)=g \star f: \tau \rightarrow g(f(\tau)+\tau) + f(\tau)$. Operasi \textit{merge} didefinisikan dengan $merge(f,g)=\min(f,g):\tau \rightarrow \min \{g(\tau), f(\tau) \}$. Kedua operasi tersebut memiliki kompleksitas waktu $O(\mid f\mid +\mid g\mid )$. Diberikan rute $P=[v_1,\ldots,v_k]$, \textit{travel-time profile} (TTP) didefinisikan dengan $f_P:\Pi\rightarrow \mathbb{R}^{+}$, yang memetakan waktu keberangkatan $\tau$ (pada $v_1$) ke \textit{travel time} pada $P$ untuk menuju ke $v_k$. \textit{Arrival time function} $arr f:\tau\rightarrow f(\tau)+\tau$, memetakan waktu keberangkatan $\tau$ ke waktu kedatangan setelah melintasi sisi yang memiliki TTF $f$. 
 
 Diberikan waktu keberangkatan $\tau$ dan simpul asal $s$ dan simpul target $t$, kueri \textit{earliest-arrival} (EA) menanyakan waktu kedatangan paling awal pada simpul $t$ dari perjalanan $s$ ke $t$ ketika berangkat pada waktu $\tau$. Kueri \textit{latest-departure} (LD) menanyakan waktu keberangkatan pada simpul $s$ jika perjalanan dari $s$ mencapai simpul $t$ pada waktu $\tau$. Kueri profil menanyakan waktu tempuh minimum pada setiap kemungkinan waktu keberangkatan $\tau$, yaitu profil $f_{s,t}$ dari $s$ ke $t$. Kueri EA dapat ditangani dengan algoritma Time-Dependent Dijkstra yang \textit{pseudocode} algoritmanya diberikan oleh algoritma~\ref{alg:td-dijkstra}. Kueri profile dapat ditangani dengan algoritma ProfileSearch yang \textit{pseudocode} algoritmanya diberkan oleh algoritma~\ref{alg:profileSearch}
 
@@ -466,7 +466,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Time-Dependent Dijkstra menghitung label final $\tau[u]=EA_G(s,u,\tau_0)$ untuk semua simpul $u$ yang dapat dijangkau (dan $\tau[u]=\infty$ jika $u$ tidak dapat dijangkau.} 
+\caption{Time-Dependent Dijkstra menghitung label final $\tau[u]=EA_G(s,u,\tau_0)$ untuk semua simpul $u$ yang dapat dijangkau (dan $\tau[u]=\infty$ jika $u$ tidak dapat dijangkau (diadaptasi dari \cite{Veit2013}).} 
 \label{alg:td-dijkstra}
 \resizebox{\textwidth}{!}{%
 \begin{minipage}{\textwidth}
@@ -502,7 +502,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 \end{algorithm}
 
 \begin{algorithm}
-\caption{ProfileSearch menghitung label final $f[u]=TTP_G(s,u)$ untuk semua simpul $u$.} 
+\caption{ProfileSearch menghitung label final $f[u]=TTP_G(s,u)$ untuk semua simpul $u$ (diadaptasi dari \cite{Veit2013}).} 
 \label{alg:profileSearch}
 \resizebox{\textwidth}{!}{%
 \begin{minipage}{\textwidth}
@@ -519,7 +519,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
         \If{$g_{new}(\tau)<f[v](\tau) \text{ untuk semua } \tau\in \mathbb{R}$}
             \State $p[v]=\emptyset$ \Comment{hapus \textit{predecessor} kurang optimal}
         \EndIf
-        \State $f[v]=min(f[v],g_{new})$ \Comment{perbarui label tentatif dari simpul $v$}
+        \State $f[v]=\min(f[v],g_{new})$ \Comment{perbarui label tentatif dari simpul $v$}
         \State $p[v]=\{u\}\cup p[v]$ \Comment{perbarui \textit{predecessor} tentatif dari simpul $v$}
         \If{$v\notin Q$}
             \State $Q.insert(v, \min f[v])$
@@ -546,7 +546,115 @@ Algoritma kueri paling banyak akan mengunjungi semua simpul dari sel $s$ pada le
 
 \subsection{Fase Kustomisasi yang Bergantung pada Waktu}
 \label{subsec:tdcrp-timedependent-customization}
-Untuk mengadaptasi Customizable Route Planning pada graf yang bergantung pada waktu, \cite{Baum2016} memperkenalkan metode Time-Dependent Customizable Route Planning. Kustomisasi untuk Time-Dependent Customizable Route Planning dilakukan dengan menjalankan algoritma ProfilSearch~\ref{alg:profileSearch} dari setiap simpul batas \textit{entry} $u\in C$ pada semua sel $C\in\mathcal{C}^{i}, i\geq 1$ ke setiap simpul batas \textit{exit} $v\in C$ lain untuk mendapatkan \textit{time-dependent shortcuts}. Tetapi, pada level i > 1, algoritma ProfileSearch dijalankan pada subgraf dari $H_{i-1}$ menggunakan sisi-sisi jalan pintas dari subsel-subsel dari sel $C\in\mathcal{C}^i, i>1$. Optimasi dapat dilakukan dengan memanfaatkan $f^{\max}\text{ dan }f^{\min} \text{ dari setiap \textit{travel time function} } f $. Sebelum merelaksasi sisi $(u,v)$, cek apakah $f_{u}^{\min}+f_{(u,v)}^{\min}\leq f^{max}_v$, lakukan relaksasi sisi $(u,v)$. Setelah menjalankan operasi $link(f_u,f_{uv})$, kita dapat mendapatkan nilai label tentatif $\tilde{f}_v$,$\tilde{f}_v^{max}$, dan $\tilde{f}_v^{min}$. Jika kondisi $\tilde{f}_v^{min}>f_v^{max}$, operasi $merge(f_u,f_{uv}\ \star \ f[u])$ tidak perlu dijalankan. Jika kondisi $\tilde{f}_v^{max}<f_v^{min}$, ganti $f_v$ dengan $\tilde{f}_v$. Jika kedua kondisi tersebut tidak dipenuhi, jalankan operasi $merge(f_u,f_{uv}\ \star \ f[u])$. \cite{Baum2016} menjalanakan fase kustomisasi dengan memanfaatkan $multithreading$, dimana setiap sel diproses di \textit{thread} yang berbeda.
+Untuk mengadaptasi Customizable Route Planning pada graf yang bergantung pada waktu, \cite{Baum2016} memperkenalkan metode Time-Dependent Customizable Route Planning. Kustomisasi untuk Time-Dependent Customizable Route Planning dilakukan dengan menjalankan algoritma ProfilSearch~\ref{alg:profileSearch} dari setiap simpul batas \textit{entry} $u\in C$ pada semua sel $C\in\mathcal{C}^{i}, i\geq 1$ ke setiap simpul batas \textit{exit} $v\in C$ lain untuk mendapatkan \textit{time-dependent shortcuts}. Tetapi, pada level i > 1, algoritma ProfileSearch dijalankan pada subgraf dari $H_{i-1}$ menggunakan sisi-sisi jalan pintas dari subsel-subsel dari sel $C\in\mathcal{C}^i, i>1$. Optimasi dapat dilakukan dengan memanfaatkan $f^{\max}\text{ dan }f^{\min} \text{ dari setiap \textit{travel time function} } f $. Sebelum merelaksasi sisi $(u,v)$, cek apakah $f_{u}^{\min}+f_{(u,v)}^{\min}\leq f^{max}_v$, lakukan relaksasi sisi $(u,v)$. Setelah menjalankan operasi $link(f_u,f_{uv})$, kita dapat mendapatkan nilai label tentatif $\tilde{f}_v$,$\tilde{f}_v^{max}$, dan $\tilde{f}_v^{min}$. Jika kondisi $\tilde{f}_v^{min}>f_v^{max}$, operasi $merge(f_u,f_{uv}\ \star \ f[u])$ tidak perlu dijalankan. Jika kondisi $\tilde{f}_v^{max}<f_v^{min}$, ganti $f_v$ dengan $\tilde{f}_v$. Jika kedua kondisi tersebut tidak dipenuhi, jalankan operasi $merge(f_u,f_{uv}\ \star \ f[u])$. \cite{Baum2016} menjalanakan fase kustomisasi dengan memanfaatkan $multithreading$, dimana setiap sel diproses di \textit{thread} yang berbeda. Pseudocode dari kustomisasi untuk TDCRP ditunjukkan pada Algoritma~\ref{alg:tdcrp-customization-level1} untuk kustomisasi level-1 dan Algoritma~\ref{alg:tdcrp-customization-levelhigher} untuk kustomisasi level > 1
+
+
+\begin{algorithm}
+\caption{BUILDOVERLAYLEVELONETD membuat \textit{clique} pada setiap sel-sel level 1 dan membuat \textit{array} bobot \textit{shortcut arcs} $W$ (\cite{Baum2016})}
+\label{alg:tdcrp-customization-level1}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{\textwidth}
+\scriptsize
+\begin{algorithmic}[1]
+\setstretch{0.9}
+\Procedure{BUILDOVERLAYLEVELONE}{$G, OG$}
+    \For {$(cellId, cell) \in OG.CellsInLevel[1]$} \Comment{buat \textit{clique} dan \textit{array} bobot \textit{shortcut arcs} $W$  pada setiap sel level 1 }
+        \For {$i = 0 \textbf{ to } cell.numEntryPoints$}
+            \State $enVertex \gets OG.entryPoint[cell, i]$  \Comment{Dijkstra dari $entryVertex$ ke semua $exitVertex$ dari sel $cellId$}
+            \State $enVertexEntryPos \gets G.entryPos[enVertex.originalEdge, enVertex]$
+            \State $info \gets \emptyset$
+            \State $oInfo \gets \emptyset$
+            \State $Q \gets \emptyset: PriorityQueue$
+            \State $info[enVertexEntryPos] \gets 0$
+            \State $Q.insert(0, (enVertex, enVertexEntryPos))$
+            \While{$Q \neq \emptyset$}
+                \State $((u, uEntryPos), uDT) \gets Q.extractMin()$
+                \For {$(v, oArc,exitPoint, turn) \in  G.E[u, uEntryPos]$}
+                    \State $v \gets oArc.head$
+                    \State $newDT \gets (uDT \star oArc.weight) \star turn.cost $
+                    \State $vCellId \gets G.cellId[v]$
+                    \If {$vCellId = cellId$}
+                        \State $vEntryPos \gets oArc.entryPos$ \Comment{$v$ masih satu sel dengan $cellId$}
+                        \State $((\cdot),vVisited) \gets info[vEntryPos]$
+                        \State $info[vEntryPos] \gets \min(info[vEntryPos], newDT)$
+                        \State $Q.InsertOrDecreaseKey(\min info[vEntryPos], (v, vEntryPos))$
+                    \Else 
+                        \State $exitOverlay \gets G.overlayVertex[u, exitPoint, true]$ \Comment{$v$ tidak satu sel dengan $cellId$ }
+                        \State $exitOverlayVisited \gets oInfo[exitOverlay]$  \Comment{$u$ adalah $exitVertex$ dari $cellId$}
+                        \State $oInfo[exitOverlay] \gets \min (oInfo[exitOverlay], uDT \star turn.cost) $
+                    \EndIf 
+                \EndFor 
+            \EndWhile 
+
+            \For {$j =0  \textbf{ to }  cell.numExitPoints$}
+                \State $exitVertex \gets OG.exitPoint[cell, j]$ \Comment{simpan bobot dari sisi \textit{shortcut} $(enVertex, exitVertex)$}
+                \State $((\cdot), exitPointVisited) \gets oInfo[exitVertex]$
+                \If{$exitPointVisited = false$}
+                    \State $OG.W[cell.cellOffset + i \cdot cell.numberExitPoints + j]  \gets \infty$
+                \Else 
+                    \State $OG.W[cell.cellOffset + i \cdot cell.numberExitPoints + j]  \gets oInfo[exitPoint]$
+                \EndIf 
+            \EndFor 
+        \EndFor
+    \EndFor 
+\EndProcedure
+\end{algorithmic}
+\end{minipage}%
+}
+\end{algorithm}
+
+
+\begin{algorithm}
+\caption{BUILDOVERLAYTD membuat \textit{clique} pada setiap sel-sel level $l>1$ dan membuat \textit{array} bobot \textit{shortcut arcs} $W$ (\cite{Baum2016})}
+\label{alg:tdcrp-customization-levelhigher}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{\textwidth}
+\scriptsize
+\begin{algorithmic}[1]
+\setstretch{0.9}
+\Procedure{BUILDOVERLAY}{$G, OG, l$}
+    \For {$(cellId, cell) \in OG.CellsInLevel[l]$} \Comment{buat \textit{clique} dan \textit{array} bobot \textit{shortcut arcs} $W$  pada setiap sel level $l$ }
+        \For {$i = 0 \textbf{ to } cell.numEntryPoints$}
+            \State $enVertex \gets OG.entryPoint[cell, i]$  \Comment{Dijkstra dari $entryVertex$ ke semua $exitVertex$ dari sel $cellId$}
+            \State $info \gets \emptyset$
+            \State $oInfo \gets \emptyset$
+            \State $Q \gets \emptyset: PriorityQueue$
+            \State $info[enVertex] \gets 0$
+            \State $Q.insert(0, (enVertex))$
+            \While{$Q \neq \emptyset$}
+                \State $((u), uDT) \gets Q.extractMin()$
+                \For {$(exitVertex, wOffset) \in  OG.E[u, l-1]$} \Comment{\textit{traverse} semua sisi \textit{shortcut} $(enVertex,exitVertex)$ pada level $l-1$ }
+                    \State $shortcutWeight \gets OG.W[wOffset]$
+                    \State $newDT \gets uDT \star shortcutWeight$
+                    \State $(oldExitDT, exitVisited) \gets info[exitVertex]$
+                    \State $info[exitVertex] \gets \min(info[exitVertex], newDT)$
+                    \State $exitNeighborVertex \gets exitVertex.neighbor$ \Comment{\textit{traverse} neighbor dari $exitVertex$ yang berbeda sel dengan $sel$ dari $exitVertex$ pada level $l-1$}
+                    \If {$TRUNCATEDTOEVEL(exitNeighborVertex.cellId, l) = cellId$}
+                        \State $boundaryArcWeight \gets  exitVertex.edge.weight$ \Comment{$exitNeighborVertex$ masih satu sel dengan $exitVertex$ pada level $l$}
+                        \State $newNeighborDT \ \gets newDT \star boundaryArcWeight $
+                        \State $(oldNDT, neighborVisited) \gets info[exitNeighborVertex]$
+                        \State $info[exitNeighborVertex] \gets \min(info[exitNeighborVertex], newNeighborDT)$
+                        \State $Q.InsertOrDecreaseKey(\min info[exitNeighborVertex], exitNeighborVertex)$
+                    \EndIf 
+                \EndFor 
+            \EndWhile 
+
+            \For {$j =0  \textbf{ to }  cell.numExitPoints$}
+                \State $exitVertex \gets OG.exitPoint[cell, j]$ \Comment{simpan bobot dari sisi \textit{shortcut} $(enVertex, exitVertex)$}
+                \State $((\cdot), exitPointVisited) \gets oInfo[exitVertex]$
+                \If{$exitPointVisited = false$}
+                    \State $OG.W[cell.cellOffset + i \cdot cell.numberExitPoints + j]  \gets \infty$
+                \Else 
+                    \State $OG.W[cell.cellOffset + i \cdot cell.numberExitPoints + j]  \gets oInfo[exitPoint]$
+                \EndIf 
+            \EndFor 
+        \EndFor
+    \EndFor 
+\EndProcedure
+\end{algorithmic}
+\end{minipage}%
+}
+\end{algorithm}
 
 
 \subsection{Integrasi dengan Data Lalu Lintas Terbaru dan Prediksi Kecepatan Lalu Lintas}
