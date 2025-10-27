@@ -165,7 +165,7 @@ Dimana $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilita
     \Procedure{KalmanFilter}{$\overline{v}, \sigma_v, g_k.v$} \Comment{kalman filter \textit{with constant velocity model}}
         \State $\overline{v}_{k}=\overline{v}_{k-1}$ \Comment{prediction}
         \State $\sigma_{v,k}=\sqrt{\sigma^2_{v,k-1}+ \sigma^2_{a}\Delta t^2_{k-1}}$
-        \State $\overline{v} = \frac{\sigma_v^2 \overline{v}_{k}+\sigma^2_{v,k} g_k.v} {\sigma_v^2+\sigma_{v,k}^2}$\Comment{filtering}
+        \State $\overline{v}_k = \frac{\sigma_v^2 \overline{v}_{k}+\sigma^2_{v,k} g_k.v} {\sigma_v^2+\sigma_{v,k}^2}$\Comment{filtering}
         \State $\sigma_{v,k} =\sqrt{(\sigma^{-2}_v + \sigma^{-2}_{v,k})^{-1}}$
     \EndProcedure
 \end{algorithmic}
