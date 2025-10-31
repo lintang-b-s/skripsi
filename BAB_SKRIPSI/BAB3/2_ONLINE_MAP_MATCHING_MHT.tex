@@ -1,5 +1,4 @@
-\subsection{Formulasi Masalah}
-\label{subsec:omm-preliminaries}
+
 Sekuens data dari sejumlah K data titik GPS yang dikumpulkan oleh kendaraan didefinisikan dengan \textit{trajectory} $g_{1:K}$. Setiap data titik GPS memiliki data $(g_k.t,g_k.lat,g_k.lng,g_k.v)$ yang secara berturut-turut adalah waktu pengambilan titik GPS, \textit{latitude}, \textit{longitude}, dan kecepatan. Kecepatan dapat diambil dari diferensial antara dua titik GPS. Jaringan jalan adalah sebuah graf berarah $G(V,E)$ dimana $V$ adalah himpunan dari simpul-simpul dan $E$ adalah himpunan dari sisi-sisi yang merepresentasikan segmen jalan. Setiap segmen jalan $e\in E$ memiliki 4 data $(e.id, e.l, e.start, e.end)$ yang secara berturut-turut adalah ID, panjang, titik awal, dan titik akhir dari sisi $e$. Diberikan sebuah rute $r_{1:k}$ adalah sekuens dari sejumlah K segmen-segmen jalan yang sesuai dengan lintasan yang diberikan \textit{trajectory} $g_{1:k}$. Setiap segmen jalan $r_k\in E$ merepresentasikan segmen jalan dimana kendaraan sedang berada pada \textit{time step} $k$. \textit{Online map matching} bertugas untuk menentukan segmen jalan $r_k$ pada setiap \textit{time step} $1\leq k \leq K$ dengan hanya menggunakan titik-titik GPS terdahulu $\{g_i\mid 1\leq i\leq k\}$. Rute $\tau$ adalah rute yang dimulai dari segmen jalan $r_k$ yang mempunyai panjang tak hingga. $\tau$ adalah sekuens dari segmen-segmen jalan yang saling terhubung $\tau=\{e_1\rightarrow e_2\ldots\}, 1 \leq i \leq \infty, \text{ dimana } e_1=r_k, e_i.end=e_{i+1}.start$. Probabilitas rute $\tau$ didefinisikan dengan:
 \begin{equation}
     p(\tau)=\prod_{i=1}^{\infty}p(e_i\rightarrow e_{i+1})
@@ -46,8 +45,7 @@ Dimana $x$ adalah posisi kendaraan pada segmen jalan $r_k$. Integral dari distri
 \end{equation}
 Dimana $x'$ adalah titik proyeksi GPS $g_k$ pada segmen jalan $r_k$ dan $x'_r$ adalah jarak relatif $x'$ terhadap simpul \textit{tail} dari segmen jalan. $\lVert g_k-r_k\rVert_{euclidean}$ adalah jarak \textit{euclidean} antara titik proyeksi $x'$ dan $g_k$ dengan menggunakan \textit{equirectangular projection}.
 
-\subsection{Algoritma}
-\label{subsec:omm-algoritma}
+
 Penelitian oleh \cite{Taguchi2019} menyelesaikan permasalahan \textit{online map-matching} menggunakan Algoritma Multiple Hypothesis Technique (OMM-MHT). MHT mendefinisikan probabilitas posterior dengan:
 \begin{equation}
     p(r_k\mid g_{1:k})=\sum_{i=1}^{N_c}c_i.w\cdot \delta_{r_{k},c_i.e}

@@ -1,9 +1,6 @@
-\subsection{Formulasi Masalah}
-\label{subsec:traffic-forecasting-problem-formulation}
 Diberikan sekuens data pengamatan lalu lintas sejumlah $M$ \textit{time steps} $\textbf{X}=\{x_{t-M+1},x_{t-M+2},\ldots,x_{t} \}, \ x_t\in \mathbb{R}^N$. $x_t$ adalah vektor kecepatan dari sejumlah $N$ segmen jalan pada waktu $t$. Tujuan prediksi kecepatan lalu lintas adalah memprediksi sekuens nilai dari $Y=\{x_{t+1},x_{t+2},\ldots,x_{t+Q}\}$. Graf jaringan jalan $G=(V,E)$ terdiri dari himpunan simpul $V$ yang berjumlah $N$ simpul dan himpunan sisi $E$. Misalkan $v\in V$ adalah simpul dan $e=(v,u)\in E$ adalah sisi yang menghubungkan $v$ dengan $u$. $N(v)=\{u\in V\mid (v,u)\in E\}$ adalah tetangga dari simpul $v$. Matriks $adjacency$ $A\in \mathbb{R}^{N\times N}$ adalah representasi matematis dari graf, dengan $A_{ij}=c>0$ jika $(v_i,v_j)\in E$ dan $A_{ij}=0$ jika $(v_i,v_j)\notin E$. Simpul adalah stasiun pemantau lalu lintas dan sisi menunjukkan keterhubungan antar stasiun.
 
-\subsection{Arsitektur Multivariate Time-Series Graph Neural Network (MTGNN)}
-\label{subsec:traffic-forecasting-mtgnn-architecture}
+
 Arsitektur dari MTGNN terdiri dari, \textit{graph learning layer}, sejumlah $m$ \textit{graph convolution layer}, sejumlah $m$ \textit{temporal convolution layer}, dan sebuah \textit{output layer} (\cite{Wu2020}). \textit{Graph learning layer} mempelajari matriks \textit{adjacency} graf secara adaptif untuk menangkap hubungan tersembunyi di antara data \textit{traffic time series} tanpa perlu menentukan struktur graf secara eksplisit (\cite{Wu2020}). \textit{Graph learning layer} didefinisikan dengan:
 
 \begin{align}
