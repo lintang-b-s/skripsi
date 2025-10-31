@@ -25,7 +25,7 @@ p(r_k \mid g_{1:k})
 p(g_k \mid r_k) &= \int_{0}^{r_k.l} p(g_k,x \mid r_k)\, dx \notag  \\
 &= \int_{0}^{r_k.l} p(g_k \mid x, r_k)\, p(x \mid r_k)\, dx \notag  \\
 &= \int_{0}^{r_k.l} \frac{1}{\sqrt{2\pi\sigma_g}}
-    \exp \left(-\frac{\lVert g_k - x \rVert_{\text{euclidean}}^2}{2\sigma_g} \right)
+    \exp \left(-\frac{\lVert g_k - x \rVert_{\text{euclidean}}^2}{2\sigma_g^2} \right)
     p(x \mid r_k)\, dx \tag{3.4}\\
 \lVert g_k - x \rVert_{\text{euclidean}} 
 &= R\sqrt{\bigl((\lambda_{g_k}-\lambda_{x})\cos\phi_m\bigr)^2+(\phi_{g_k}-\phi_{x})^2} \tag{3.5} \\
@@ -42,7 +42,7 @@ p(x\mid r_k) &=
 
 Dimana $x$ adalah posisi kendaraan pada segmen jalan $r_k$. Integral dari distribusi normal pada probabilitas GPS \textit{observation} dapat diaproksimasi dengan menggunakan fungsi $logistic$, sehingga probabilitas dapat dihitung secara analitik. Hasil aproksimasi didefinisikan dengan:
 \begin{equation}
-    p(g_k\mid r_k) \approx \frac{1}{r_k.l} \exp \left(-\frac{\lVert g_k-r_k\rVert_{euclidean}}{2\sigma_g}\right)\left[ \frac{1}{1+\exp (-\frac{\pi(x-x'_r)}{\sqrt{3}\sigma_g})} \right]_{x=0}^{r_k.l}
+    p(g_k\mid r_k) \approx \frac{1}{r_k.l} \exp \left(-\frac{\lVert g_k-r_k\rVert_{euclidean}^2}{2\sigma_g^2}\right)\left[ \frac{1}{1+\exp (-\frac{\pi(x-x'_r)}{\sqrt{3}\sigma_g})} \right]_{x=0}^{r_k.l}
 \end{equation}
 Dimana $x'$ adalah titik proyeksi GPS $g_k$ pada segmen jalan $r_k$ dan $x'_r$ adalah jarak relatif $x'$ terhadap simpul \textit{tail} dari segmen jalan. $\lVert g_k-r_k\rVert_{euclidean}$ adalah jarak \textit{euclidean} antara titik proyeksi $x'$ dan $g_k$ dengan menggunakan \textit{equirectangular projection}.
 
