@@ -53,7 +53,7 @@ FROM pandoc/latex:3.7.0.2-alpine
 # To arrange three pictures in a single row with three columns in LaTeX, you can use the subfigure package from the subcaption bundle. This approach is highly recommended as it provides excellent control over captions and spacing.
 # https://ctan.org/pkg/subcaption The package is distributed with caption.
 RUN tlmgr update --self && \
-    tlmgr install sectsty lastpage helvetic  algorithm2e algorithms algorithmicx amsmath pgfgantt pdfpages
+    tlmgr install sectsty lastpage helvetic  algorithm2e algorithms algorithm algorithmicx amsmath pgfgantt pdfpages \
      longtable graphicx  subcaption algpseudocode  amsthm  adjustbox  csquotes \
     babel-english babel-indonesian \
     nomencl \

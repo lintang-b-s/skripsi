@@ -2,11 +2,13 @@
     \item Pembuatan \textit{software} \textit{traffic aware routing engine} dengan fitur \textit{time-dependendent route planning} dengan menggunakan teknik akselerasi Time-Dependent Customizable Route Planning, pencarian rute alternatif dengan metode heuristik Admissible Paths, dan \textit{online map-matching } dengan Multiple Hypothesis Technique (MHT) menggunakan bahasa pemrograman Go dan Typescript.
     \item Pembuatan model dari Multivariate Time-Series Graph Neural Network menggunakan library PyTorch.
     \item Algoritma yang dibandingkan adalah Time-independent Customizable Route Planning dan Time-dependent Customizable Route Planning. Metrik yang digunakan adalah \textit{query time} dan \textit{travel time}.
-    \item Pengujian algoritma dilakukan pada peta openstreetmap dengan batas \textit{bounding box} koordinat geografis $(minLongitude,minLatitude,maxLongitude,maxLatitude)=(110.132,-8.2618,110.9221,-6.888)$ yang meliputi wilayah area Daerah Istimewa Yogyakarta, Klaten, Semarang, dan Surakarta. 
-    \item Pengujian algoritma \textit{route planning} dilakukan pada beberapa kueri rute terpendek dan rute alternatif yang digenerate secara acak dan algoritma \textit{online map-matching} dilakukan pada trajektori gps yang dihasilkan oleh perangkat lunak dengan data \textit{ground truth} berupa data rute yang digenerate menggunakan algoritma \textit{route planning}.
+    \item Pengujian algoritma dilakukan pada peta Openstreetmap dengan batas \textit{bounding box} koordinat geografis $(minLongitude,minLatitude,maxLongitude,maxLatitude)=(110.132,-8.2618,110.9221,-6.888)$ yang meliputi wilayah area Daerah Istimewa Yogyakarta, Klaten, Semarang, dan Surakarta. 
+    
+    \item Pengujian algoritma \textit{route planning} dilakukan pada beberapa kueri rute terpendek yang dihasilkan secara acak dan pengujian algoritma \textit{online map-matching} dilakukan pada trajektori gps yang dihasilkan oleh perangkat lunak dengan data \textit{ground truth} berupa data rute yang digenerate menggunakan algoritma \textit{route planning}.
   
     \item Dataset historis \textit{traffic speed} diperoleh dengan melakukan \textit{web scraping} data \textit{real time traffic} pada situs waze.com dalam kurun waktu 30 hari.
-    \item Arsitektur Graph Neural Network yang digunakan adalah Multivariate Time-Series Graph Neural Network.
-    \item Metrik evaluasi yang digunakan adalah akurasi dan \textit{query latency} untuk kinerja \textit{online map-matching}.
+    
+    
+    \item Metrik evaluasi yang digunakan adalah \textit{precision}, \textit{recall}, skor F1, dan \textit{query time} untuk kinerja \textit{online map-matching}.
     \item Metrik evaluasi yang digunakan adalah Root Mean Square Error (RMSE) dan Mean Absolute Error (MAE) untuk kinerja \textit{traffic speed forecasting}.
 \end{enumerate}
