@@ -1,0 +1,8 @@
+Metrik evaluasi yang umum digunakan dalam regresi adalah Root Mean Squared Error (RMSE). RMSE mengukur perbedaan antara nilai respons yang diprediksi untuk suatu observasi tertentu dengan
+nilai respons \textit{ground truth} untuk observasi tersebut (\cite{James2023}).
+
+\begin{equation}
+    RMSE=\sqrt{\frac{1}{N} \sum_{n=1}^N (y_n- \hat{f}(x_n))^2}
+\end{equation}
+
+Dimana $\hat{f}(x_n)$ adalah prediksi yang diberikan oleh model $\hat{f}$ pada input observasi ke-$n$.
