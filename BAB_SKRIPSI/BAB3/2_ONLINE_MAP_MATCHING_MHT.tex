@@ -4,11 +4,11 @@ Sekuens data dari sejumlah K data titik GPS yang dikumpulkan oleh kendaraan dide
     p(\tau)=\prod_{i=1}^{\infty}p(e_i\rightarrow e_{i+1})
 \end{equation}
 
-\textit{Online map-matching} dapat dilakukan dengan menggunakan \textit{Bayesian filtering} (\cite{Taguchi2019}). \textit{Bayesian filtering} memberikan estimasi probabilitas posterior $p(r_k\mid g_{1:k})$ untuk setiap langkah pengambilan sampel $k$. Probabilitas posterior dapat dihitung melalui teorema bayes sebagai berikut:
+\textit{Online map-matching} dapat dilakukan dengan menggunakan \textit{Bayesian filtering} (\cite{Taguchi2019}). \textit{Bayesian filtering} memberikan estimasi probabilitas \textit{posterior} $p(r_k\mid g_{1:k})$ untuk setiap langkah pengambilan sampel $k$. Probabilitas \textit{posterior} dapat dihitung melalui teorema bayes sebagai berikut:
 \begin{equation}
     p(r_k\mid g_{1:k})=\frac{p(g_k\mid r_k,g_{1:k-1})p(r_k,g_{1:k-1})}{p(g_k\mid g_{1:k-1})}
 \end{equation}
-Dengan mengasumsikan independensi bersyarat,$g_k \perp\!\!\!\perp g_{1:k-1} \mid r_k $ posterior dapat dihitung dengan:
+Dengan mengasumsikan independensi bersyarat, $g_k \perp\!\!\!\perp g_{1:k-1} \mid r_k $ \textit{posterior} dapat dihitung dengan:
 
 \begin{align}
 p(r_k \mid g_{1:k}) 
@@ -17,7 +17,7 @@ p(r_k \mid g_{1:k})
 \label{eq:bayesian-filtering}
 \end{align}
 
-\textit{Bayesian filtering} terdiri dari \textit{prediction} dan \textit{filtering}. \textit{Prediction} menghitung probabilitas \textit{prior} $p(r_k \mid g_{1:k-1})$. $p(r_k\mid r_{k-1})$ adalah probabilitas \textit{route prediction}, yang merepresentasikan probabilitas kendaraan berada di segmen jalan $r_k$ pada langkah waktu berikutnya, berdasarkan segmen jalan sebelumnya. \textit{Filtering} menghitung probabilitas posterior. \textit{Bayesian filtering-based map-matching} melibatkan prosedur \textit{prediction} dan prosedur \textit{filtering} secara berulang. Probabilitas GPS \textit{observation} $p(g_k \mid r_k)$ memberikan \textit{likelihood} bahwa pengukuran GPS $g_k$ dihasilkan ketika kendaraan berada pada segmen jalan $r_k$. \textit{Measurement error} $\lVert g_k-x\rVert_{euclidean}$ diasumsikan mengikuti distribusi Gaussian dengan rata-rata sama dengan nol. Jarak $\lVert \cdot \rVert_{euclidean}$ adalah jarak \textit{euclidean} dari titik hasil proyeksi \textit{equirectangular} dari titik koordinat \textit{latitude} $\phi$  dan \textit{longitude} $\lambda$ \ GPS. Probabilitas GPS \textit{observation} didefinisikan dengan:
+\textit{Bayesian filtering} terdiri dari \textit{prediction} dan \textit{filtering}. \textit{Prediction} menghitung probabilitas \textit{prior} $p(r_k \mid g_{1:k-1})$. $p(r_k\mid r_{k-1})$ adalah probabilitas \textit{route prediction}, yang merepresentasikan probabilitas kendaraan berada di segmen jalan $r_k$ pada langkah waktu berikutnya, berdasarkan segmen jalan sebelumnya. \textit{Filtering} menghitung probabilitas \textit{posterior}. \textit{Bayesian filtering-based map-matching} melibatkan prosedur \textit{prediction} dan prosedur \textit{filtering} secara berulang. Probabilitas GPS \textit{observation} $p(g_k \mid r_k)$ memberikan \textit{likelihood} bahwa pengukuran GPS $g_k$ dihasilkan ketika kendaraan berada pada segmen jalan $r_k$. \textit{Measurement error} $\lVert g_k-x\rVert_{euclidean}$ diasumsikan mengikuti distribusi Gaussian dengan rata-rata sama dengan nol. Jarak $\lVert \cdot \rVert_{euclidean}$ adalah jarak \textit{euclidean} dari titik hasil proyeksi \textit{equirectangular} dari titik koordinat \textit{latitude} $\phi$  dan \textit{longitude} $\lambda$ \ GPS. Probabilitas GPS \textit{observation} didefinisikan dengan:
 
 \begin{align}
 \lVert g_k - x \rVert_{\text{euclidean}} &\sim \mathcal{N}(0,\sigma_g) \notag \\
@@ -39,7 +39,7 @@ p(x\mid r_k) &=
 \end{align}
 
 
-Dimana $x$ adalah posisi kendaraan pada segmen jalan $r_k$. Integral dari distribusi normal pada probabilitas GPS \textit{observation} dapat diaproksimasi dengan menggunakan fungsi $logistic$, sehingga probabilitas dapat dihitung secara analitik. Hasil aproksimasi didefinisikan dengan:
+Dimana $x$ adalah posisi kendaraan pada segmen jalan $r_k$. Integral dari distribusi normal pada probabilitas GPS \textit{observation} dapat diaproksimasi dengan menggunakan fungsi $logistic$, sehingga probabilitas dapat dihitung secara analitik. Hasil aproksimasi probabilitas \textit{observation} didefinisikan dengan:
 \begin{equation}
     p(g_k\mid r_k) \approx \frac{1}{r_k.l} \exp \left(-\frac{\lVert g_k-r_k\rVert_{euclidean}^2}{2\sigma_g^2}\right)\left[ \frac{1}{1+\exp (-\frac{\pi(x-x'_r)}{\sqrt{3}\sigma_g})} \right]_{x=0}^{r_k.l}
 \end{equation}
@@ -50,21 +50,21 @@ Penelitian oleh \cite{Taguchi2019} menyelesaikan permasalahan \textit{online map
 \begin{equation}
     p(r_k\mid g_{1:k})=\sum_{i=1}^{N_c}c_i.w\cdot \delta_{r_{k},c_i.e}
 \end{equation}
-Dimana $N_C$ adalah jumlah kandidat segmen jalan, $c_i$ adalah kandidat ke-$i$ yang terdiri dari $(c_i.w, c_i.e)$ dan $\delta_{r_{k},c_i.e}$ adalah Kronecker delta yang bernilai 1 jika $r_{k}=c_i.e$ dan bernilai 0 jika $r_{k}\neq c_i.e$. Alih-alih mempertahankan \textit{probability density function} (PDF) $p(r_k\mid g_{1:k})$ pada semua segmen jalan, MHT mengestimasi PDF dengan hanya mempertahankan sejumlah kecil kandidat yang masuk akal, masing-masing dengan bobotnya sendiri. 
+Dimana $N_C$ adalah jumlah kandidat segmen jalan, $c_i$ adalah kandidat ke-$i$ yang terdiri dari $(c_i.w, c_i.e)$ dan $\delta_{r_{k},c_i.e}$ adalah Kronecker delta yang bernilai 1 jika $r_{k}=c_i.e$ dan bernilai 0 jika $r_{k}\neq c_i.e$. MHT mengestimasi \textit{probability density function} (PDF) dari \textit{posterior} $p(r_k\mid g_{1:k})$ dengan hanya mempertahankan sejumlah kecil kandidat yang masuk akal, masing-masing dengan bobotnya sendiri. 
 
-Algoritma diawali dengan menginisialisasi himpunan kandidat segmen jalan $C$ yang jarak \textit{haversine} nya dengan titik GPS $g_1$ kurang dari jarak $L_C$ yang sudah ditentukan sebelumnya dan nilai bobot dari setiap kandidat ditetapkan berdasarkan panjang segmen jalan $c_i.e.l$. Probabilitas posterior dihitung saat algoritma menjalankan prosedur \textit{filtering}. \textit{Output} dari setiap \textit{time step} adalah kandidat dengan probabilitas tertinggi, yaitu $\arg \max c_i.w$.
+Algoritma diawali dengan menginisialisasi himpunan kandidat segmen jalan $C$ yang jarak \textit{haversine} nya dengan titik GPS $g_1$ kurang dari jarak $L_C$ yang sudah ditentukan sebelumnya dan nilai bobot dari setiap kandidat ditetapkan berdasarkan panjang segmen jalan $c_i.e.l$. Probabilitas \textit{posterior} dihitung saat algoritma menjalankan prosedur \textit{filtering}. \textit{Output} dari setiap \textit{time step} adalah kandidat dengan probabilitas \textit{posterior} tertinggi, yaitu $\arg \max c_i.w$.
 
 Probabilitas \textit{route prediction} $p(r_{k+1}\mid r_k)$ didefinisikan dengan:
 \begin{align}
 p(r_{k+1}\mid r_k)&= \mathbb{E}_{p(\tau)}[p(r_{k+1} \mid r_k, \tau)] \notag \\
 &=\sum_{\tau}p(\tau) \ p(r_{k+1} \mid r_k, \tau)  \notag \\
 &=\sum_{\tau}p(\tau)\int p(x) \int p(v_k)\  p(r_{k+1}\mid r_k,\tau, x , v_k)dv_kdx \notag \\
-&=\sum_{\tau}p(\tau)\sum_{n=1}^{\infty}f(\tau_{1:n})\delta_{r_k+1,e_n}  \notag 
-\\&=\sum_{n=1}^{\infty}\sum_{e_1}\ldots\sum_{e_n}\prod_{i=1}^{n-1}p(e_i\rightarrow e_{i+1})f(\tau_{1:n})\delta_{r_k+1,e_n} 
+&=\sum_{\tau}p(\tau)\sum_{n=1}^{\infty}f(\tau_{1:n})\delta_{r_{k+1},e_n}  \notag 
+\\&=\sum_{n=1}^{\infty}\sum_{e_1}\ldots\sum_{e_n}\prod_{i=1}^{n-1}p(e_i\rightarrow e_{i+1})f(\tau_{1:n})\delta_{r_{k+1},e_n} 
 \label{eq:route-prediction}
 \end{align}
 
-Persamaan~\ref{eq:route-prediction} berarti bahwa probabilitas \textit{route prediction} dapat dihitung sebagai \textit{expected value} dari probabilitas bersyarat bahwa kendaraan berjalan melalui setiap kemungkinan rute. Dimana $p(e_i\rightarrow e_{i+1})$ adalah probabilitas transisi sisi dari $e_i$ ke $e_j$ yang dimodelkan sebagai sebuah model Markov yang nilainya dapat diestimasi dari data historis. Probabilitas transisi sisi didefinisikan dengan:
+Persamaan~\ref{eq:route-prediction} berarti bahwa probabilitas \textit{route prediction} dapat dihitung sebagai \textit{expected value} dari probabilitas bersyarat bahwa kendaraan berjalan melalui setiap kemungkinan rute $\tau$ yang dimulai dari $r_k$. Dimana $p(e_i\rightarrow e_{i+1})$ adalah probabilitas transisi sisi dari $e_i$ ke $e_j$ yang dimodelkan sebagai sebuah model Markov yang nilainya dapat diestimasi dari data historis. Probabilitas transisi sisi didefinisikan dengan:
 \begin{equation}
 p(e_i\rightarrow e_j)=\frac{N(e_i\rightarrow e_j) + 1}{\sum_{j}N(e_i\rightarrow e_j)+N_j}
 \end{equation}
@@ -92,8 +92,12 @@ $f(\tau_{1:n})$ didefinisikan dengan:
 \end{align}
 
 
-Dimana $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilitas kendaraan melaju lebih jauh melampaui segmen jalan $e_n$ pada \textit{time step } $k$. $p(v_k)$ adalah probabilitas estimasi kecepatan dari kendaraan yang menghasilkan data GPS yang diasumsikan mengikuti distribusi \textit{Gaussian}. Prediksi rute dapat diaproksimasi dengan menghitung perkalian antara probabilitas probabilitas kendaraan melaju lebih jauh dari $e_n$ ($h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$), probabilitas rute $p(\tau)$ dari k kumpulan segmen-segmen jalan yang dimulai dari kandidat dan saling terhubung, dan probabilitas \textit{posterior} pada \textit{time step} sebelumnya dari kandidat, hingga suatu titik dimana probabilitas tersebut lebih kecil dari probabilitas $L_p$ yang kita tentukan sendiri nilainya. Jika hasil perkalian probabilitas tersebut lebih besar dari $L_p$, maka algoritma akan melanjutkan proses secara rekursif untuk menghitung probabilitas untuk rute gabungan dengan kandidat segmen berikutnya yang terhubung dengan kandidat sebelumnya. Algoritma OMM-MHT (\cite{Taguchi2019}) dijelaskan pada \textit{pseudocode} algoritma~\ref{alg:omm-mht}. $h_{pre}$ dan $h_{new}$ secara berturut-turut adalah $h(\tau_{1:n-1}, \overline{v}_k,\sigma_{v,k},\Delta t_k)$ dan $h(\tau_{1:n}, \overline{v}_k,\sigma_{v,k},\Delta t_k)$. Pada tahap prediksi, setiap kandidat menghasilkan kandidat-kandidat baru untuk semua \textit{states} yang dapat dilewati dan kandidat-kandidat yang mewakili \textit{state} yang sama diintegrasikan dengan menjumlahkan probabilitas \textit{prior} nya. Sehingga, \textit{states} yang diwakili oleh banyak kandidat sangat mungkin untuk dipilih sebagai hasil prediksi \textit{map-matching} pada \textit{time step berikutnya}. Pada tahap \textit{filtering}, kandidat-kandidat yang memiliki probabilitas \textit{posterior} dibawah $L_u$ akan dihapus dari daftar kandidat. Kompleksitas waktu dari algoritma adalah $O(b^{d_p})$, dimana $b$ adalah jumlah rata-rata tetangga dari segmen. $d_p$ adalah kedalaman aksimum dari \textit{prediction tree} (lihat gambar~\ref{fig:prediction-tree-omm}).
+Dimana $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilitas kendaraan melaju jauh melampaui segmen jalan $e_n$ pada \textit{time step } $k$. $p(v_k)$ adalah probabilitas estimasi kecepatan dari kendaraan yang menghasilkan data GPS yang diasumsikan mengikuti distribusi \textit{Gaussian}. Probabilitas \textit{route prediction} dapat diaproksimasi dengan menghitung perkalian antara probabilitas probabilitas kendaraan melaju lebih jauh dari $e_n$ ($h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$), probabilitas rute $p(\tau)$ dari k kumpulan segmen-segmen jalan yang dimulai dari kandidat $e_1$ dan saling terhubung, dan probabilitas \textit{posterior} pada \textit{time step} sebelumnya dari kandidat, hingga suatu titik dimana probabilitas tersebut lebih kecil dari probabilitas $L_p$ yang kita tentukan sendiri nilainya. Jika aproksimasi probabilitas \textit{route prediction} tersebut lebih besar dari $L_p$, maka algoritma akan melanjutkan proses secara rekursif untuk menghitung aproksimasi probabilitas \textit{route prediction} untuk rute gabungan dengan kandidat segmen jalan berikutnya yang terhubung dengan kandidat segmen jalan sebelumnya. Algoritma OMM-MHT (\cite{Taguchi2019}) dijelaskan pada \textit{pseudocode} algoritma~\ref{alg:omm-mht}. $h_{pre}$ dan $h_{new}$ secara berturut-turut adalah $h(\tau_{1:n-1}, \overline{v}_k,\sigma_{v,k},\Delta t_k)$ dan $h(\tau_{1:n}, \overline{v}_k,\sigma_{v,k},\Delta t_k)$. Pada tahap prediksi, setiap kandidat menghasilkan kandidat-kandidat baru untuk semua \textit{hidden states} yang dapat dilewati dan kandidat-kandidat yang mewakili \textit{state} yang sama diintegrasikan dengan menjumlahkan probabilitas \textit{prior} nya. Sehingga, \textit{hidden states} yang diwakili oleh banyak kandidat sangat mungkin untuk dipilih sebagai hasil prediksi \textit{map-matching} pada \textit{time step berikutnya}. Pada tahap \textit{filtering}, kandidat-kandidat yang memiliki probabilitas \textit{posterior} dibawah $L_u$ akan dihapus dari daftar kandidat. Kompleksitas waktu dari algoritma adalah $O(b^{d_p})$, dimana $b$ adalah jumlah rata-rata tetangga dari segmen. $d_p$ adalah kedalaman aksimum dari \textit{prediction tree} (lihat gambar~\ref{fig:prediction-tree-omm}). Nilai dari $b$ dapat ditentukan secara empirik berdasarkan peta yang digunakan, untuk Kota Nagakute nilai dari $b$ adalah 1.40. Nilai dari $d_p$ juga ditentukan secara empirik yang dihitung dengan $d_p\approx \hat{v}\Delta t/l$, dimana $l$ adalah rata-rata panjang segmen jalan dan $\hat{v}$ adalah kecepatan tertinggi yang memiliki nilai dari fungsi distribusi kumulatifnya kurang dari 1-$L_p$. $\overline{v}_k$ dan $\sigma_{v,k}$ diestimasi menggunakan Kalman Filter dengan \textit{constant velocity model} (yang mengasumsikan percepatan sebagai \textit{gaussian white noise}) yang model sistemnya didefinisikan dengan:
 
+\begin{align}
+ v_{k}=v_{k-1}+a_k\Delta t_{k-1} \\ 
+ a_k \sim \mathcal{N}(0, \sigma_{a}^2)
+\end{align}
 
 \begin{figure}[H]
     \centering
@@ -141,7 +145,7 @@ Dimana $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilita
 
     \Procedure{Recur}{$C_{new},w,\tau,p_\tau,\overline{v},\sigma_v,\Delta t_{k-1}, \text{ dan } h_{pre}$}
         \State $h_{new}\leftarrow h(\tau,\overline{v},\sigma_v,\Delta t_{k-1})$ \Comment{menghitung $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$}
-        \If {$w \cdot p_\tau \cdot h_{new}>L_p$}
+        \If {$w \cdot p_\tau \cdot h_{new}>L_p$} \Comment{aproksimasi dari probabilitas \textit{route prediction} > $L_p$}
             \State $\mathcal{E}_{next} \gets \{e_{next}\mid e_{next}\in E, e_{next}.start=\tau.last.end\}$
             \For {$\textbf{all } e_{next}\in \mathcal{E}_{next}$}
                 \State $\tau'\gets \{\tau\rightarrow\ e_{next}\}$
@@ -153,7 +157,7 @@ Dimana $h(\tau_{1:n},\overline{v}_k,\sigma_{v,k},\Delta t_k)$ adalah probabilita
         \State $w' \gets w\cdot p_{\tau}\cdot (h_{pre}-h_{new})$ \Comment{menghitung  $p(r_{k}\mid r_{k-1})\ p(r_{k-1}\mid g_{{1:k-1}})$ }
         \State $c_{new}\gets C_{new}.Find(c_{new}\mid c_{new}.e=\tau .last)$
         \If{$c_{new}\neq null$}
-            \State $c_{new}.w=c_{new}.w+w'$ \Comment{jumlahkan bobot dari \textit{states} yang sama yang diwakili > 1 kandidat untuk hitung \textit{prior}}
+            \State $c_{new}.w=c_{new}.w+w'$ \Comment{jumlahkan bobot dari \textit{hidden states} yang sama yang diwakili > 1 kandidat untuk hitung \textit{prior}}
         \Else 
             \State $C_{new}\gets C_{new}\cup (\tau.last, w')$
         \EndIf

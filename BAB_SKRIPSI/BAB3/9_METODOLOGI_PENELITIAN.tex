@@ -1,7 +1,86 @@
 \subsection{Deskripsi Penelitian}
 \label{subsec:research-description}
-Tujuan dari penelitian ini adalah untuk membangun perangkat lunak sumber terbuka \textit{routing engine} untuk Openstreetmap yang mendukung fitur \textit{time-dependent route planning} yang diintegrasikan dengan model prediksi kecepatan lalu-lintas dan \textit{online map-matching}. Penulis berharap perangkat lunak \textit{routing-engine} yang dikembangkan dapat menghasilkan rute optimal, akurat, serta mampu menghindari kemacetan. Dengan fitur \textit{online map-matching} yang dikembangkan, penulis berharap pengguna perangkat lunak dapat memudahkan pengguna dalam melakukan navigasi jarak-jauh. Penulis juga berharap, perangkat lunak yang dikembangkan juga dapat dimanfaatkan oleh perusahaan yang sangat membutuhkan layanan navigasi pada operasional perusahaan mereka, sekaligus membantu menurunkan biaya operasional perusahaan dikarenakan perangkat lunak bersifat sumber terbuka.
+Tujuan dari penelitian ini adalah untuk membangun perangkat lunak sumber terbuka \textit{routing engine} untuk Openstreetmap (\cite{Openstreetmap2017}) yang mendukung fitur \textit{time-dependent route planning} yang diintegrasikan dengan model prediksi kecepatan lalu-lintas dan \textit{online map-matching}. Penulis berharap perangkat lunak \textit{routing-engine} yang dikembangkan dapat menghasilkan rute optimal, akurat, serta mampu menghindari kemacetan. Dengan fitur \textit{online map-matching} yang dikembangkan, penulis berharap pengguna perangkat lunak dapat memudahkan pengguna dalam melakukan navigasi jarak-jauh. Penulis juga berharap, perangkat lunak yang dikembangkan juga dapat dimanfaatkan oleh perusahaan yang sangat membutuhkan layanan navigasi pada operasional perusahaan mereka, sekaligus membantu menurunkan biaya operasional perusahaan dikarenakan perangkat lunak yang dikembangkan bersifat sumber terbuka.
 
-Penelitian akan menggunakan \textit{dataset} kecepatan lalu lintas dari hasil \textit{web scraping} situs waze.com selama 30 hari (periode 22 Oktober 2025 - 22 November 2025). Data peta yang digunakan diambil dari data Openstreetmap dengan \textit{bounding box} koordinat geografis $(minLongitude,minLatitude,maxLongitude,maxLatitude)=(110.132,-8.2618,110.9221,-6.888)$ yang meliputi wilayah area Daerah Istimewa Yogyakarta, Klaten, Semarang, Salatiga, dan Surakarta. Data peta akan diproses oleh perangkat lunak dan dibuat struktur data graf dengan representasi \textit{adjacency array} \cite{Mehlhorn2008}. Setelah itu perangkat lunak akan menjalankan fase \textit{preprocessing} dari Customizable Route Planning yang dijelaskan pada subbab~\ref{subsec:tdcrp-preprocessing}. \textit{Web scraping} dilakukan setiap 20 detik dan data akan di aggregasi dan di rata-rata untuk interval 5 menit. \textit{Piecewise linear function} yang memiliki interval 20 menit untuk setiap hari Senin-Jumat akan dibuat dengan  merata-rata data trafik pada setiap minggu di hari tersebut. Setelah mendapatkan data kecepatan lalu lintas 30 hari, akan dilakukan \textit{training} model MTGNN. Setelah pelatihan, Setiap 20 detik akan dilakukan \textit{web scraping} data kecepatan lalu lintas dari situs waze.com, dan setiap 15 menit data akan di agregasi dan dirata-rata untuk interval 5 menit. Setiap 20 menit akan dilakukan prediksi kecepatan lalu-lintas satu jam kedepan menggunakan model MTGNN yang sudah dilatih. Data hasil prediksi dan \textit{piecewiese linear function} historis akan dijadikan sebagai input fase kustomisasi Time-dependent Customizable Route Planning yang dijelaskan pada subbab~\ref{subsec:tdcrp-kustomisasi}.
+Penelitian akan menggunakan \textit{dataset} kecepatan lalu lintas dari hasil \textit{web scraping} situs waze.com selama 30 hari (periode 22 Oktober 2025 - 22 November 2025). Data peta yang digunakan diambil dari data Openstreetmap dengan \textit{bounding box} koordinat geografis $(minLongitude,minLatitude,maxLongitude,maxLatitude)=(110.132,-8.2618,110.9221,-6.888)$ yang meliputi wilayah area Daerah Istimewa Yogyakarta, Klaten, Semarang, Salatiga, dan Surakarta. Data peta akan diproses oleh perangkat lunak dan dibuat struktur data graf dengan representasi \textit{adjacency array} (\cite{Mehlhorn2008}). Setelah itu perangkat lunak akan menjalankan fase \textit{preprocessing} dari Customizable Route Planning yang dijelaskan pada subbab~\ref{subsec:tdcrp-preprocessing}. \textit{Web scraping} dilakukan setiap 20 detik dan data akan diaggregasi menggunakan fungsi rata-rata ke dalam interval 5 menit. \textit{Piecewise linear function} yang memiliki interval 20 menit untuk setiap hari (Senin-Minggu) akan dibuat berdasarkan rata-rata data lalu lintas mingguan pada hari tersebut. Setelah mendapatkan data kecepatan lalu lintas 30 hari, akan dilakukan \textit{training} model Multivariate Time-series Graph Neural Network (MTGNN). Setelah pelatihan, Setiap 20 detik akan dilakukan \textit{web scraping} data kecepatan lalu lintas dari situs waze.com, data akan diaggregasi menggunakan fungsi rata-rata ke dalam interval 5 menit. Setiap 20 menit akan dilakukan prediksi kecepatan lalu-lintas satu jam kedepan menggunakan model MTGNN yang sudah dilatih. Data hasil prediksi dan \textit{piecewiese linear function} historis dari setiap sisi yang mengalami kemacetan akan digabung menjadi satu \textit{piecewiese linear function}. Lalu \textit{Piecewise linear function} dari setiap sisi yang mengalami kemacetan tersebut dijadikan sebagai input fase kustomisasi (pembaruan data lalu-lintas) Time-dependent Customizable Route Planning yang dijelaskan pada subbab~\ref{subsec:tdcrp-traffic-update}. Evaluasi akan dilakukan dengan cara menghasilkan 10.000 kueri acak dan membandingkan rata-rata, median, p95, dan p99 dari \textit{query time}.
 
-Fitur \textit{online map matching} akan di \textit{serve} dengan komunikasi protokol Websocket, yang mana \textit{client frontend} akan memanggil \textit{online map-matching} setiap koordinat GPS pengguna berubah. Evaluasi dari \textit{online map-matching} akan menggunakan data rute \textit{ground truth} yang penulis tentukan. Data \textit{test} menggunakan hasil dari \textit{online map-matching} yang akan dihasilkan oleh perangkat lunak dari data titik-titik GPS yang mengikuti rute \textit{ground truth}. Data titik-titik GPS dihasilkan oleh penulis dengan cara berkendara mengikuti rute \textit{ground truth} selagi menggunakan fitur \textit{online map-matching} dari perangkat lunak yang dikembangkan.
+Fitur \textit{online map matching} akan melayani pengguna dengan menggunakan komunikasi protokol Websocket (\cite{Melnikov2011}), yang mana \textit{client frontend} akan memanggil \textit{online map-matching} setiap koordinat GPS pengguna berubah. Evaluasi dari \textit{online map-matching} akan menggunakan data rute \textit{ground truth} yang penulis tentukan. Data \textit{test} menggunakan hasil dari \textit{online map-matching} yang akan dihasilkan oleh perangkat lunak dari data titik-titik GPS yang mengikuti rute \textit{ground truth}. Data titik-titik GPS dihasilkan oleh penulis dengan cara berkendara mengikuti rute \textit{ground truth} selagi menggunakan fitur \textit{online map-matching} dari perangkat lunak yang dikembangkan.
+
+\subsection{Alat dan Bahan}
+\label{subsec:tools-materials}
+Pengembangan metode, model, dan perangkat lunak pada penelitian ini akan dikembangkan menggunakan komputer pribadi dan server dengan spesifikasi:
+\begin{itemize}
+    \item Komputer Pribadi
+    \begin{itemize}
+        \item CPU: 3.2 GHz 6 Core AMD Ryzen 5 7540U     
+        \item RAM: 16 GB LPDDR5x-5200 MHz
+        \item GPU: AMD Radeon Graphics
+        \item OS: Arch Linux
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item Server
+    \begin{itemize}
+        \item CPU: 3 Core AMD EPYC Processor  
+        \item RAM: 8 GB LPDDR4
+        \item OS: Ubuntu 24.04.3 LTS
+    \end{itemize}
+\end{itemize}
+
+Selain itu, penelitian ini juga akan menggunakan perangkat lunak berikut:
+
+\begin{itemize}
+    \item Kaggle Notebook
+    \item Paperspace Gradient Notebook
+\end{itemize}
+
+\subsection{Prosedur Penelitian}
+\label{subsec:research-procedure}
+Langkah-langkah penelitian akan dibagi menjadi beberapa fase, meliputi: studi literatur, akuisisi data, prapemrosesan data, perancangan model \textit{traffic speed forecasting}, perancangan perangkat lunak, pengembangan perangkat lunak, dan evaluasi. Berikut adalah diagram alir untuk penelitian ini:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, keepaspectratio]{figures/research_diagram.drawio.png}
+    \caption{\textit{Flowchart} prosedur penelitian}
+    \label{fig:research-procedure}
+\end{figure}
+
+
+\subsection{Studi Literatur}
+\label{subsec:literature-study}
+Langkah awal dari penelitian adalah meneliti makalah dan artikel terkait untuk mendapatkan wawasan tentang algoritma \textit{route planning}, \textit{online map-matching}, dan \textit{traffic speed forecasting}. Dari analisis makalah dan artikel, dapat ditentukan permasalahan yang dapat dijadikan tujuan penelitian ini.
+
+
+\subsection{Akuisisi Data}
+\label{subsec:data-acquisition}
+\textit{Dataset} diperoleh dari \textit{web scraping} data \textit{real time traffic speed} dari situs waze.com dengan interval setiap 20 detik. \textit{Dataset} berisi kecepatan maksimum yang dapat ditempuh kendaraan pada setiap jalan pada waktu tertentu. Setiap jalan dipetakan ke \textit{identifier} (ID) dari \textit{element} Openstreetmap \textit{Way} yang didapat dari kueri \textit{nearest neighbor} menggunakan struktur data R-tree (\cite{Gutman1984}).
+
+
+\subsection{Prapemrosesan Data} 
+\label{subsec:data-preproccessing}
+Data hasil \textit{webscraping} akan diaggregasi menggunakan fungsi rata-rata ke dalam interval 5 menit. Karena kemacetan tidak terjadi pada setiap jalan pada setiap waktu, data kecepatan di beberapa ruas jalan yag tidak mengalami kemacetan akan memiliki nilai \textit{null}. Untuk menangani \textit{missing value}, penulis menggunakan data kecepatan maksimum dari Openstreetmap Way yang memuat ruas jalan yang tidak memiliki data kecepatan \textit{real-time} dari situs waze.com. Penulis juga menerapkan normalisasi data dengan metode \textit{z-score}. 
+
+\subsection{\textit{Train Test Split}} 
+\label{subsec:train-test-split}
+Data kecepatan lalu-lintas kemudian akan dibagi menjadi tiga subset, \textit{training, validation}, dan \textit{test set}, dengan rasio 60:20:20. \textit{Training set} digunakan untuk melatih model. \textit{Validation set } digunakan untuk memilih \textit{hyperparameter} $\beta$ dan $K$, serta mengevaluasi model selama pelatihan untuk mencegah \textit{overfitting}. \textit{Test set} yang digunakan untuk mengevaluasi model dengan mengujinya dengan data yang sebelumnya belum dipelajari, yang akan coba diprediksi oleh model dan membandingkan hasilnya dengan nilai \textit{ground truth}. 
+
+
+\subsection{Mendesain Model \textit{Traffic Speed Forecasting}} 
+\label{subsec:model-design}
+Model Multivariate Time-series Graph Neural Network (MTGNN) dipilih untuk tugas prediksi kecepatan lalu lintas karena model dapat mempelajari secara otomatis cara menggabungkan karakteristik \textit{non-stationary time series} seperti tren, \textit{seasonality}, dan autokorelasi ke dalam prediksi. Selain itu, modul \textit{graph convolution} dan \textit{ graph learning layer} dari MTGNN mampu mempelajari ketergantungan spasial tersembunyi di antara variabel dengan baik. Panjang \textit{input sequence/lag} ditetapkan sebesar 12 (60 menit) dan horison waktu prediksi ditetapkan sebesar 60 menit. Model dibuat menggunakan pustaka Pytorch (\cite{Ansel2024}).
+
+
+\subsection{Pengembangan Perangkat Lunak \textit{Routing Engine}} 
+\label{subsec:software-development}
+Perangkat lunak akan dikembangkan menggunakan bahasa pemrograman Go. Perangkat lunak akan mengimplementasikan fitur prapemrosesan, kustomisasi, dan kueri dari Time-dependent Customizable Route Planning dan Time-independent Customizable Route Planning. Fitur \textit{online map-matching} yang diimplementasikan akan melayani \textit{client frontend} dengan menggunakan protokol komunikasi Websocket yang memungkinkan \textit{online map-matching} dapat dilakukan secara \textit{real-time}. Fitur \textit{online map-matching} akan menggunakan parameter $\sigma_a=180 \ m/min, \sigma_g=5.0 \ m, \sigma_v=500 \ m/min, L_c=30.0 \ m, L_p=0.0001, \text{ dan } L_u=0.001 $. Fitur rute alternatif yang diimplementasikan akan menggunakan parameter $k=3, \gamma=0.8, \alpha=0.25, \text{ dan } \epsilon=0.25$. Untuk \textit{graph partitioning} menggunakan algoritma Inertial Flow, parameter yang digunakan adalah $U=\{2^8,2^{11},2^{14}, 2^{17},2^{18}\}$. 
+
+
+\subsection{Perangkat Lunak \textit{Routing Engine}} 
+\label{subsec:online-software}
+Perangkat lunak \textit{routing engine} akan memanggil API prediksi kecepatan lalu lintas MTGNN setiap 20 menit dengan data input dari hasil \textit{web scraping} data \textit{real time traffic speed} dari situs waze.com. Data hasil prediksi dan \textit{piecewiese linear function} historis dari setiap sisi yang mengalami kemacetan akan digabung menjadi satu \textit{piecewiese linear function}. Lalu \textit{Piecewise linear function} dari setiap sisi yang mengalami kemacetan tersebut dijadikan sebagai input fase kustomisasi (pembaruan data lalu-lintas) Time-dependent Customizable Route Planning yang dijelaskan pada subbab~\ref{subsec:tdcrp-traffic-update}. Perangkat lunak juga disertai panduan navigasi berupa deskripsi petunjuk arah dan belokan dari rute yang dipilih dalam bentuk teks.
+
+\subsection{Evaluasi} 
+\label{subsec:evaluation}
+Untuk evaluasi algoritma \textit{route planning}, waktu eksekusi dari prapemrosesan, kueri, dan kueri dari Time-dependent dan Time-independent Customizable Route Planning akan dibandingkan. Model \textit{traffic speed forecasting} MTGNN akan dievaluasi dengan menggunakan metrik \textit{root mean square error} (RMSE) dan \textit{mean absolute error} (MAE). Algoritma \textit{online map-matching} akan dievaluasi dengan menggunakan metrik akurasi yang merupakan proporsi antara jumlah segmen jalan hasil \textit{map-matching} terdapat pada rute \textit{ground truth} dengan jumlah titik GPS yang dilakukan \textit{map-matching}. 
+

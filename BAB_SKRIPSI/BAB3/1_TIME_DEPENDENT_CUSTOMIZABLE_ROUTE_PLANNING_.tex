@@ -230,7 +230,7 @@ Diberikan simpul $v\in V$, \textit{query level} $l_{st}(v)$ adalah level terting
 
 Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya diinisialisasi dengan $\infty$. Algoritma \textit{forward search} dimulai dengan mengeksplorasi simpul-simpul yang berada pada sel yang sama dengan simpul $s$ pada level 1, sedangkan \textit{backward search} dimulai dengan mengeksplorasi simpul-simpul yang berada pada sel yang sama dengan simpul $t$ pada level 1. Algoritma mulai mengeksplorasi simpul-simpul tetangga dari simpul $v$ yang berbeda dari sel $s$ atau $t$ pada level 1 ketika \textit{query level} $l_{st}(v)>0$, pada tahap ini algoritma menjalankan algoritma Dijkstra pada graf \textit{overlay} pada level $l_{st}(v)$ memanfaatkan sisi-sisi \textit{shortcuts} yang sudah dibuat pada fase kustomisasi. Pada saat melakukan relaksasi sisi, algoritma melakukan pengecekan apakah simpul $v$ (yang merupakan $head$ dari sisi $(u,v)$ yang sedang direlaksasi) apakah sudah di kunjungi pada kedua pencarian. Jika simpul $v$ telah dikunjungi oleh \textit{forward search} dan \textit{backward search}, maka nilai waktu tempuh tercepat tentatif $\mu$ diperbarui. Apabila simpul $v$ (yang merupakan $head$ dari sisi $(u,v)$ yang sedang direlaksasi) memiliki $l_{st}(v) = 0$, maka ketika simpul $v$ berada dalam keadaan \textit{settled}, algoritma akan mengeksplorasi simpul-simpul tetangga dari $v$ yang berada pada sel yang sama dengan sel simpul $s$ atau $t$ pada level 1.
 
-\cite{Delling2015} melakukan beberapa optimasi untuk mempercepat algoritma kueri. Pada saat relaksasi sisi jalan pintas $(u,v)$ atau $(v,u)$ pada subrutin Bidirectional Overlay Graph Dijkstra, subrutin menyimpan waktu tempuh tercepat dari simpul $v$ dan tidak langsung menambahkan/memperbarui simpul \textit{exit} $v$ ke $forwardOverlayPQ$ atau $backwardOverlayPQ$, subrutin langsung melakukan relaksasi sisi batas $(v,w)\in E$. Hal ini mengurangi jumlah operasi Priority Queue secara signifikan. \cite{Delling2015} juga melakukan optimisasi dengan cara mengalokasikan ukuran awal setiap struktur data yang dibutuhkan kueri dengan $\max\{len(c_1(s)),len(c_1(t))\}$, dimana $len(c_1(v))$ adalah jumlah simpul yang terletak pada sel yang mengandung simpul $v$. Implementasi Priority Queue dari algoritma kueri menggunakan varian Rank Pairing-Heap Priority Queue (\cite{Haeupler2009}) karena operasi \textit{decreaseKey} dari varian ini memiliki kompleksitas waktu terarmortisasi $O(1)$ dan operasi \textit{insert} memiliki kompleksitas waktu $O(1)$ akan membuat waktu eksekusi algoritma kueri semakin cepat. Algoritma~\ref{alg:crp-tamlbd} menunjukkan \textit{pseudocode} dari algoritma kueri Customizable Route Planning.
+\cite{Delling2015} melakukan beberapa optimasi untuk mempercepat algoritma kueri. Pada saat relaksasi sisi jalan pintas $(u,v)$ atau $(v,u)$ pada subrutin Bidirectional Overlay Graph Dijkstra, subrutin menyimpan waktu tempuh tercepat dari simpul $v$ dan tidak langsung menambahkan/memperbarui simpul \textit{exit} $v$ ke $forwardOverlayPQ$ atau $backwardOverlayPQ$, subrutin langsung melakukan relaksasi sisi batas $(v,w)\in E$. Hal ini mengurangi jumlah operasi Priority Queue secara signifikan. \cite{Delling2015} juga melakukan optimisasi dengan cara mengalokasikan ukuran awal setiap struktur data yang dibutuhkan kueri dengan $\max\{len(c_1(s)),len(c_1(t))\}$, dimana $len(c_1(v))$ adalah jumlah simpul yang terletak pada sel yang mengandung simpul $v$. Implementasi Priority Queue dari algoritma kueri menggunakan varian Fibonacci Heap Priority Queue (\cite{Fredman1987}) karena operasi \textit{decreaseKey} dari varian ini memiliki kompleksitas waktu terarmortisasi $O(1)$ dan operasi \textit{insert} memiliki kompleksitas waktu $O(1)$ akan membuat waktu eksekusi algoritma kueri semakin cepat. Algoritma~\ref{alg:crp-tamlbd} menunjukkan \textit{pseudocode} dari algoritma kueri Customizable Route Planning.
 
 
 \begin{algorithm}
@@ -249,6 +249,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
     \State $fInfo, bInfo \gets \emptyset$
     \State $fQ,bQ \gets  \emptyset: PriorityQueue$
     \State $foQ,boQ \gets  \emptyset: PriorityQueue$
+    \State $Via \gets \emptyset$
     \State $shortest \gets \infty$
     \State $fQ.insert(s, sEntryPos)$
     \State $bQ.insert(t, tEntryPos)$
@@ -259,12 +260,12 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
         \State $minQ=\min \{ \min_{fQ}, \min_{bQ}  \}$
         \State $minOQ=\min \{ \min_{foQ}, \min_{boQ}  \}$
         \If {$minQ < minOQ$}
-            \State \Call{BDTurnAwareDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest$}
+            \State \Call{BDTurnAwareDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest, Via$}
         \Else 
-             \State \Call{BDTurnAwareOverlayDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest$}
+             \State \Call{BDTurnAwareOverlayDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest, Via$}
         \EndIf
     \EndWhile   
-    \State \textbf{return} $shortest, $ \Call{PATHUNPACKING}{$fInfo, bInfo$}
+    \State \textbf{return} $Via, shortest, $ \Call{PATHUNPACKING}{$fInfo, bInfo$}, $fInfo, bInfo$ 
 \EndProcedure
 \end{algorithmic}
 \end{minipage}%
@@ -279,7 +280,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.9}
-\Procedure{BDTurnAwareDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest$}
+\Procedure{BDTurnAwareDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest, Via$}
     \State $minRankF \gets fQ.findMin()$
     \State $minRankB \gets bQ.findMin()$
     \If {$minRankF <  minRankB$}
@@ -288,9 +289,9 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
             \State $l_{st}(v) \gets \min\{MSD(PV(s), PV(v)), MSD(PV(t), PV(v))\}$
             \If{$l_{st}(v)=0$}
                 \State $newTT \gets fInfo[uEntryPos].tt + oArc.weight + turn.cost$
-                \State \Call{RELAX}{$v,u,uEntryPos, oArc, false, newTT,fInfo,bInfo, fQ,bQ, G, shortest$}
+                \State \Call{RELAX}{$v,u,uEntryPos, oArc, false, newTT,fInfo,bInfo, fQ,bQ, G, shortest, Via$}
             \Else 
-                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,oArc,false, shortest, G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ, boQ$}
+                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,oArc,false, shortest, G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ, boQ, Via$}
             \EndIf 
         \EndFor 
     \Else 
@@ -299,9 +300,9 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
             \State $l_{st}(v) \gets \min\{MSD(PV(s), PV(v)), MSD(PV(t), PV(v))\}$
             \If{$l_{st}(v)=0$}
                 \State $newTT\gets bInfo[uExitPos].tt + iArc.cost +turn.cost$
-                \State \Call{RELAX}{$v,u,uExitPos,iArc,true,newTT,fInfo,bInfo,fQ,bQ, G, shortest$}
+                \State \Call{RELAX}{$v,u,uExitPos,iArc,true,newTT,fInfo,bInfo,fQ,bQ, G, shortest, Via$}
             \Else
-                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,iArc, true, shortest, G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ,boQ$}
+                \State \Call{RELAXOVERLAY}{$v,u,uEntryExitPos,iArc, true, shortest, G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ,boQ, Via$}
             \EndIf
         \EndFor 
         
@@ -320,7 +321,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.9}
-\Procedure{RELAX}{$v,u,uEntryPos, Arc, backward, newTT, fInfo,bInfo, fQ,bQ, G, shortest$}
+\Procedure{RELAX}{$v,u,uEntryPos, Arc, backward, newTT, fInfo,bInfo, fQ,bQ, G, shortest, Via$}
     \If {$backward = false$}
         \State $vEntryPos \gets G.entryPos[arc,v] $
         \State $((\cdot), vVisited) \gets fInfo[vEntryPos]$
@@ -330,9 +331,10 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
             \For{$(voArc, vExitPos, turn, \cdot) \in G.E[v, arc.entryPos]$} 
                 \State $((\cdot), visitedByBackward) \gets bInfo[vExitPos]$ \Comment{cek apakah $v$ sudah dikunjungi pada kedua \textit{search}}
                 \If{$visitedByBackward = true$}
-                    \State $newTT \gets fInfo[vEntryPos].tt + turn.cost + binfo[vExitPos].tt$
+                    \State $newTT \gets fInfo[vEntryPos].tt +  binfo[vExitPos].tt$
                     \If{$newTT < shortest$}
                         \State $shortest=  newTT$
+                        \State $Via \gets Via \ \cup \ \{v, vEntryPos, vExitPos\} $
                     \EndIf
                 \EndIf 
             \EndFor 
@@ -346,9 +348,10 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
             \For{$(viArc, vEntryPos, turn, \cdot) \in G.\overleftarrow{E}[v,arc.exitPos]$}
                 \State $((\cdot), visitedByForward) \gets fInfo[vEntryPos]$  \Comment{cek apakah $v$ sudah dikunjungi pada kedua \textit{search}}
                 \If {$visitedByForward=true$}
-                    \State $newTT \gets fInfo[vEntrypos].tt + turn.cost + bInfo[vExitPos].tt$
+                    \State $newTT \gets fInfo[vEntrypos].tt +  bInfo[vExitPos].tt$
                     \If {$newTT < shortest$}
                         \State $shortest \gets newTT$
+                        \State $Via \gets Via \ \cup \ \{v, vEntryPos, vExitPos\} $
                     \EndIf 
                 \EndIf 
             \EndFor 
@@ -369,7 +372,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.9}
-\Procedure{RELAXOVERLAY}{$v,u,uEntryExitPos,arc,backward,shortest,G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ,boQ$}
+\Procedure{RELAXOVERLAY}{$v,u,uEntryExitPos,arc,backward,shortest,G, newTT, l_{st}(v), fInfo,\newline bInfo, foQ,boQ, Via$}
     \If {$backward = false$}
         \State $vOverlay \gets G.overlayVertex[v, arc.entryPos, backward]$
         \State $((\cdot), vOverlayVisited) \gets fInfo[vOverlay]$
@@ -379,6 +382,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
             \State $((\cdot), visitedByBackward) \gets bInfo[vOverlay]$ \Comment{cek apakah $v$ sudah dikunjungi pada kedua \textit{search}}
             \If {$visitedByBackward = true \textbf{ and } fInfo[vOverlay].tt + bInfo[vOverlay].tt  < shortest$} 
                 \State $shortest \gets fInfo[vOverlay].tt + bInfo[vOverlay].tt$ 
+                \State $Via \gets Via \ \cup \ \{v, G.entryPos[arc,v], G.exitPos[arc,v]\} $
             \EndIf
         \EndIf
     \Else 
@@ -390,6 +394,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
             \State $((\cdot), visitedByForward) \gets fInfo[vOverlay]$  \Comment{cek apakah $v$ sudah dikunjungi pada kedua \textit{search}}
             \If {$visitedByForward = true \textbf{ and } fInfo[vOverlay].tt + bInfo[vOverlay].tt < shortest$}
                 \State $shortest \gets fInfo[vOverlay].tt + bInfo[vOverlay].tt$
+                \State $Via \gets Via \ \cup \ \{v, G.entryPos[arc,v], G.exitPos[arc,v]\} $
             \EndIf
         \EndIf
     \EndIf 
@@ -409,7 +414,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 \scriptsize
 \begin{algorithmic}[1]
 \setstretch{0.8}
-\Procedure{BidirectionalOverlayGraphDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest$}
+\Procedure{BidirectionalOverlayGraphDijkstra}{$s,t,fInfo,bInfo,fQ, bQ, foQ, boQ, G, OG, shortest, Via$}
     \State $minRankOF \gets foQ.findMin()$
     \State $minRankOB \gets boQ.findMin()$
     \If {$minRankOF < minRankOB $}
@@ -427,11 +432,11 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
                 \State $l_{st}(w) \gets \min \{ MSD(PV(s), PV(w)), MSD(PV(t), PV(w)) \}$
                 \State $vOutArc \gets v.outArc$
                 \If {$l_{st}(w)= 0$}
-                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vOutArc, false, newTT,fInfo,bInfo, fQ,\newline bQ, G, shortest$}
+                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vOutArc, false, newTT,fInfo,bInfo, fQ,\newline bQ, G, shortest, Via, Via$}
                 \Else 
                     \State \parbox[t]{\dimexpr\linewidth-\algorithmicindent}{%
                   \Call{RELAXOVERLAY}{$w.originalId,v,v.originalId,vOutArc,false, shortest, G, newTT,$\\
-                  \hspace{2em}$l_{st}(w), fInfo, bInfo,foQ, boQ$}                }
+                  \hspace{2em}$l_{st}(w), fInfo, bInfo,foQ, boQ,Via$}                }
                 \EndIf
             \EndIf
         \EndFor 
@@ -450,11 +455,11 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
                 \State $l_{st}(w) \gets \min \{ MSD(PV(s), PV(w)), MSD(PV(t), PV(w)) \}$
                 \State $vInArc \gets v.inArc$
                 \If {$l_{st}(w)= 0$}
-                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vInArc, true, newTT,fInfo,bInfo, fQ,\newline bQ, G, shortest$}
+                    \State \Call{RELAX}{$w.originalId,v,v.originalId, vInArc, true, newTT,fInfo,bInfo, fQ,\newline bQ, G, shortest, Via$}
                 \Else 
                     \State \parbox[t]{\dimexpr\linewidth-\algorithmicindent}{%
                   \Call{RELAXOVERLAY}{$w.originalId,v,v.originalId,vInArc,true, shortest, G, newTT,$\\
-                  \hspace{2em}$l_{st}(w), fInfo, bInfo,foQ, boQ$}                }
+                  \hspace{2em}$l_{st}(w), fInfo, bInfo,foQ, boQ, Via$}                }
                 \EndIf
             \EndIf
         \EndFor
@@ -541,7 +546,7 @@ Algoritma $TAMLBD$ menyimpan waktu tempuh tercepat tentatif $\mu$ yang nilainya 
 }
 \end{algorithm}
 
-Algoritma kueri paling banyak akan mengunjungi semua simpul dari sel $s$ pada level 1, semua simpul dari sel $t$ pada level 1, dan semua simpul batas dari semua sel dari setiap level graf \textit{overlay}. Misalkan $U_1$, $E_1$, dan $B$ secara berturut-turut adalah jumlah maksimum simpul dari setiap sel pada graf \textit{overlay} level 1, jumlah maksimum sisi dari setiap sel pada graf \textit{overlay} level 1, dan jumlah simpul batas  dari semua sel dari setiap level graf \textit{overlay}. Kasus terburuk dari algoritma kueri adalah ketika semua sisi batas memiliki dua arah, sehingga jumlah maksimum sisi jalan pintas dari setiap sel dari setiap level graf \textit{overlay} adalah $B\cdot (B-1)$. Karena algoritma kueri menggunakan implementasi \textit{Rank Pairing-Heap} (\cite{Haeupler2009}) sebagai Priority Queue, maka kompleksitas waktu algoritma kueri adalah $O(E_1+U_1\log U_1+B^{2}+B \log B)$.
+Algoritma kueri paling banyak akan mengunjungi semua simpul dari sel $s$ pada level 1, semua simpul dari sel $t$ pada level 1, dan semua simpul batas dari semua sel dari setiap level graf \textit{overlay}. Misalkan $U_1$, $E_1$, dan $B$ secara berturut-turut adalah jumlah maksimum simpul dari setiap sel pada graf \textit{overlay} level 1, jumlah maksimum sisi dari setiap sel pada graf \textit{overlay} level 1, dan jumlah simpul batas  dari semua sel dari setiap level graf \textit{overlay}. Kasus terburuk dari algoritma kueri adalah ketika semua sisi batas memiliki dua arah, sehingga jumlah maksimum sisi jalan pintas dari setiap sel dari setiap level graf \textit{overlay} adalah $B\cdot (B-1)$. Karena algoritma kueri menggunakan implementasi Fibonacci Heap (\cite{Fredman1987}) sebagai Priority Queue, maka kompleksitas waktu algoritma kueri adalah $O(E_1+U_1\log U_1+B^{2}+B \log B)$.
 
 
 \subsection{Fase Kustomisasi yang Bergantung pada Waktu}
@@ -659,7 +664,7 @@ Untuk mengadaptasi Customizable Route Planning pada graf yang bergantung pada wa
 
 \subsection{Integrasi dengan Data Lalu Lintas Terbaru dan Prediksi Kecepatan Lalu Lintas}
 \label{subsec:tdcrp-traffic-update}
-Kustomisasi saat terjadi pembaruan data lalu lintas hanya dilakukan pada sel-sel $C$ yang terdampak pada pembaruan. Misalkan $e_1=(u_1,v_1),\ldots,e_k=(u_k,v_k)$ adalah sisi-sisi di dalam suatu sel $C_i^l \text{ pada level }l$ yang bobotnya diperbarui akibat data pembaruanlalu lintas atau prediksi lalu lintas. Semua pembaruan data lalu lintas diberikan sebagai fungsi parsial $f:[\pi',\pi'']\rightarrow \mathbb{R}^+$, dimana $\pi'\in \Pi \text{ dan }\pi''\in \Pi$ secara berturut-turut adalah awal dan akhir dari rentang waktu dari pembaruan data lalu lintas. Misalkan $f_1,\ldots,f_k$ adalah fungsi parsial dari setiap sisi yang diperbarui dan $\tau$ adalah waktu saat pembaruan data lalu lintas dilakukan. Untuk memperbarui sisi-sisi jalan pintas dalam sel-sel dari $C_i^l$, jalankan kueri LD dari simpul-simpul $tail$ dari semua sisi yang diperbarui. Kueri LD mengunjungi simpul-simpul dengan waktu keberangkatan yang menurun. Dengan kata lain, relaksasi sisi pada kueri LD menggunakan operasi pengurangan alih-alih penambahan untuk memperbarui label waktu keberangkatan dan Priority Queue menggunakan \textit{max heap} alih-alih \textit{min-heap}. Kustomisasi diawali dengan memasukkan $u_1,\ldots,u_k$ ke dalam Priority Queue dan menetapkan label waktu keberangkatan dari $u_i,i\in\{1,\ldots,k\}$ dengan $\pi''$. Sisi-sisi batas yang terjangkau oleh kueri LD ditandai sebagai terdampak oleh pembaruan data lalu lintas. Pencarian dihentikan ketika label waktu keberangkatan dari simpul yang baru saja \textit{settled} dibawah $\tau$. Kustomisasi dilanjutkan dengan menjalankan alogoritma ProfileSearch~\ref{alg:profileSearch} pada simpul-simpul yang ditandai pada sel $C_i^l$.
+Kustomisasi saat terjadi pembaruan data lalu lintas hanya dilakukan pada sel-sel $C$ yang terdampak pada pembaruan. Misalkan $e_1=(u_1,v_1),\ldots,e_k=(u_k,v_k)$ adalah sisi-sisi di dalam suatu sel $C_i^l \text{ pada level }l$ yang bobotnya diperbarui akibat data pembaruanlalu lintas atau prediksi lalu lintas. Semua pembaruan data lalu lintas diberikan sebagai fungsi parsial $f:[\pi',\pi'']\rightarrow \mathbb{R}^+$, dimana $\pi'\in \Pi \text{ dan }\pi''\in \Pi$ secara berturut-turut adalah awal dan akhir dari rentang waktu dari pembaruan data lalu lintas. Misalkan $f_1,\ldots,f_k$ adalah fungsi parsial dari setiap sisi yang diperbarui dan $\tau$ adalah waktu saat pembaruan data lalu lintas dilakukan. Untuk memperbarui sisi-sisi jalan pintas dalam sel-sel dari $C_i^l$, jalankan kueri LD dari simpul-simpul $tail$ dari semua sisi yang diperbarui. Kueri LD mengunjungi simpul-simpul dengan waktu keberangkatan yang menurun. Dengan kata lain, relaksasi sisi pada kueri LD menggunakan operasi pengurangan alih-alih penambahan untuk memperbarui label waktu keberangkatan dan Priority Queue menggunakan \textit{max heap} alih-alih \textit{min-heap}. Kustomisasi diawali dengan memasukkan $u_1,\ldots,u_k$ ke dalam Priority Queue dan menetapkan label waktu keberangkatan dari $u_i,i\in\{1,\ldots,k\}$ dengan $\pi''$. Sisi-sisi batas yang terjangkau oleh kueri LD ditandai sebagai terdampak oleh pembaruan data lalu lintas. Pencarian dihentikan ketika label waktu keberangkatan dari simpul yang baru saja \textit{settled} dibawah $\tau$. Kustomisasi dilanjutkan dengan menjalankan algoritma ProfileSearch~\ref{alg:profileSearch} pada simpul-simpul yang ditandai pada sel $C_i^l$.
 
 \subsection{Fase Kueri yang Bergantung pada Waktu}
 \label{subsec:tdcrp-time-dependent-query}

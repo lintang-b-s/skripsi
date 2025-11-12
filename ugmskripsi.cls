@@ -299,7 +299,7 @@
   \addcontentsline{toc}{chapter}{Halaman Pengesahan}
   \MakeUppercase{\normalfont\large\bfseries\expandafter{Halaman Pengesahan}}\\
   \vspace{1.0cm}
-  \MakeUppercase{\normalfont\large\bfseries\expandafter{Skripsi}}\\
+  \MakeUppercase{\normalfont\large\bfseries\expandafter{Proposal Skripsi Sarjana}}\\
   \vspace{0.5cm}
       \MakeUppercase{\normalfont\bfseries\@titleind}\par\nobreak
   \vspace{1.0cm}
