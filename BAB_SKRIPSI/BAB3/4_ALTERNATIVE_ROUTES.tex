@@ -51,16 +51,16 @@ Algoritma pencarian rute alternatif dimulai dari menjalankan $TAMLBD$~\ref{alg:c
             \State \textbf{return} $distanceShare$
         \EndProcedure
         \For {$candidate \in Via$}
-            \State $(\cdot, svTimeTravel, \cdot, fInfo_{sv}, bInfo_{sv}) = $\Call{TAMLBDCRP}{$s,candidate.entry $} 
-            \State $(\cdot, vtTimeTravel, \cdot, fInfo_{vt}, bInfo_{vt}) = $\Call{TAMLBDCRP}{$candidate.exit, t $} 
+            \State $(\cdot, svTimeTravel, \cdot, fInfo_{sv}, bInfo_{sv}) = $\Call{TAMLBD}{$s,candidate.entry $} 
+            \State $(\cdot, vtTimeTravel, \cdot, fInfo_{vt}, bInfo_{vt}) = $\Call{TAMLBD}{$candidate.exit, t $} 
             \State $l_v=svTimeTravel+vtTimeTravel$
             \If{$l_v \geq (1+\epsilon)\cdot l_{Opt} $}
                 \State $\textbf{continue}$
             \EndIf
 
             
-            \State $edgesSV=$\Call{backtrack}{$fInfo, candiate.node$}
-            \State $edgesVT=$\Call{backtrack}{$bInfo, candiate.node$}
+            \State $edgesSV=$\Call{backtrack}{$fInfo_{sv}, bInfo_{sv}, candiate.node$}
+            \State $edgesVT=$\Call{backtrack}{$fInfo_{vt}, bInfo_{vt}, candiate.node$}
             \State $\sigma_v=$\Call{calculatedistanceShare}{$shortestPath, edgesSV \cup edgesVT$}
             \If{$\sigma_v\geq \gamma \cdot l_{Opt}$}
                 \State \textbf{continue} 
